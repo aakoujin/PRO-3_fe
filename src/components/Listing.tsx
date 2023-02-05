@@ -9,22 +9,33 @@ interface ListingItem {
     post_desc: string;
     post_date: string;
     state: number;
-    content: Content;
-}
-
-export class Listing extends Component{
-    render(){
-        return(
-            <Card>
-            <Card.Img variant="top" src="..." alt='placeholder'/>    
-            <Card.Body>
-              <Card.Title>Special title treatment</Card.Title>
-              <Card.Text>
-                With supporting text below as a natural lead-in to additional content.
-              </Card.Text>
-              <Button variant="primary">Go somewhere</Button>
-            </Card.Body>
-          </Card>
-        )
+    content: {
+        id_content: number;
+        media: string;
     }
 }
+
+
+function Listing({id_listing, user, post_name, post_desc, post_date, state, content } : ListingItem){
+return(
+    <>
+        <div className='listing'>
+        {
+            id_listing
+        }
+        {
+            user
+        }
+        {
+            post_desc
+        }
+        {
+            post_date
+        }
+        </div>
+    </>
+)    
+
+}
+
+export default Listing
