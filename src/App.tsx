@@ -1,9 +1,9 @@
-import userEvent from '@testing-library/user-event';
 import React, { useEffect, useState } from 'react';
 import './App.css';
-import { Content } from './components/Content';
-import ListingContainer from './components/ListingsContainer';
-import ListingItem from './components/Listing'
+import { Routes, Route, Navigate } from 'react-router-dom';
+import AddListing from './components/AddListing';
+import { Container } from 'react-bootstrap';
+import "bootstrap/dist/css/bootstrap.min.css"
 
 function App() {
   const [listings, setListings] = useState([])
@@ -16,20 +16,6 @@ function App() {
   }, [])
 
   var fetchedListings = Object.values(listings)
-
-
-  const fetchUsers = async () => {
-    const result =
-      await fetch("http://localhost:42999/api/User",
-        {
-          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-          method: 'GET'
-        })
-    const users = await result.json()
-    console.log(users.$values)
-
-    //setUsers(users.$values)
-  }
 
   const fetchListings = async () => {
     const result =
@@ -45,17 +31,34 @@ function App() {
 
   if (loading) return (
     <>
-    <div className='loading'>Loading</div>
+      <div className='loading'>Loading</div>
     </>
   )
 
   return (
-    <div className='listingsContainer'>
+    <Container className="my-4">
+      <Routes>
+        <Route path="/login" element={<h1>Login</h1>} ></Route> 
+        <Route path="/" element={<h1>Home</h1>}></Route>
+        <Route path="/new" element={<AddListing />}></Route>
 
-    <ListingContainer {...fetchedListings}/>
+        <Route path="/:id">
+          <Route path="edit" element={<h1>Edit</h1>}></Route>
+          <Route index element={<h1>view</h1>}></Route>
+        </Route>
 
-    </div>
+        <Route path="*" element={<Navigate to="/" />}></Route>
+
+      </Routes>
+    </Container>
+
   );
 }
 
 export default App;
+/*
+<div className='listingsContainer'>
+
+<ListingContainer {...fetchedListings} />
+
+</div>*/

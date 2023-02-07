@@ -1,5 +1,3 @@
-import React, { Component } from 'react';
-import { Card, Button } from 'react-bootstrap';
 
 interface ListingItem {
     id_listing: number;

@@ -1,23 +1,12 @@
-import { useState } from "react"
-import { useForm } from "@mantine/form"
-import { Modal } from "@mantine/core"
+import { ListingForm } from "./ListingForm"
 
 function AddListing() {
-    const [open, setOpen] = useState(false);
 
-    const form = useForm({
-        initialValues: {
-            post_name: "",
-            post_desc: ""
-        }
-    });
-
-    return <>
-        <Modal opened={open} onClose={() => setOpen(false)} title = "Create a listing">
-
-        </Modal>
-
-    </>
+    return (
+        <>
+            <h1>New Listing</h1>
+            <ListingForm />
+        </>)
 
 }
 
