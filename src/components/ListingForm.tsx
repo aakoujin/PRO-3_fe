@@ -35,13 +35,17 @@ export function ListingForm() {
     async function handleSubmit(e: FormEvent) {
         e.preventDefault()
 
+        function attachImages(){
+            //todo multi-img 
+        }
+
         const newListing = {
             post_name: titleRef.current!.value,
             post_desc: markdownRef.current!.value,
             post_date: "2023-02-07T14:10:05.670Z",//(new Date()).toISOString,
             state: userRef.current!.value,
             contents: [{
-                media: "sample media placeholder"
+                media: imageList[0]
             }]
         }
 
@@ -81,6 +85,11 @@ export function ListingForm() {
                             <Button onClick={uploadImage}>Upload</Button>
                         </Form.Group>
                     </Col>
+                    <Row>
+                        {imageList.map((url) => {
+                            return <img key={url} src={url}/>
+                        })}
+                    </Row>
                 </Row>
                 <Row>
                     <Form.Group controlId="markdown">

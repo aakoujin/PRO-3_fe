@@ -6,6 +6,7 @@ import { Container } from 'react-bootstrap';
 import "bootstrap/dist/css/bootstrap.min.css"
 import ListingContainer from './components/ListingsContainer';
 import { FullListing } from './components/FullListing';
+import { TopNavBar } from './components/TopNavBar';
 
 function App() {
   const [listings, setListings] = useState([])
@@ -38,22 +39,24 @@ function App() {
   )
 
   return (
-    <Container className="my-4">
-      <Routes>
-        <Route path="/login" element={<h1>Login</h1>} ></Route> 
-        <Route path="/" element={<ListingContainer {...fetchedListings} />}></Route>
-        <Route path="/new" element={<AddListing />}></Route>
+    <>
+      <TopNavBar/>
+      <Container className="mb-4">
+        <Routes>
+          <Route path="/login" element={<h1>Login</h1>} ></Route>
+          <Route path="/" element={<ListingContainer {...fetchedListings} />}></Route>
+          <Route path="/new" element={<AddListing />}></Route>
 
-        <Route path="/:id">
-          <Route path="edit" element={<h1>Edit</h1>}></Route>
-          <Route index element={<FullListing/>}></Route>
-        </Route>
+          <Route path="/:id">
+            <Route path="edit" element={<h1>Edit</h1>}></Route>
+            <Route index element={<FullListing />}></Route>
+          </Route>
 
-        <Route path="*" element={<Navigate to="/" />}></Route>
+          <Route path="*" element={<Navigate to="/" />}></Route>
 
-      </Routes>
-    </Container>
-
+        </Routes>
+      </Container>
+    </>
   );
 }
 

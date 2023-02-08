@@ -1,4 +1,4 @@
-import { Card } from "react-bootstrap";
+import { Card, CardImg } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 export interface ListingItem {
@@ -23,13 +23,15 @@ export interface ContentItem {
 function Listing(listing: ListingItem) {
     const navigate = useNavigate();
 
-    function handleClick(){
-        navigate("/"+ listing.id_listing);
+    function handleClick() {
+        navigate("/" + listing.id_listing);
     }
+    const displayableMedia = listing.contents as any
 
     return (
         <>
             <Card onClick={handleClick}>
+                <CardImg variant="top" height="200px" style={{ objectFit: "cover" }} src={displayableMedia.$values[0].media} alt="placeholder" />
                 <div className='listing'>
                     {listing.id_listing}
                     {listing.post_name}
@@ -41,4 +43,4 @@ function Listing(listing: ListingItem) {
 }
 
 export default Listing
-//Object.values(listing.contents.$values)[0].media
+//add handling for no-image case

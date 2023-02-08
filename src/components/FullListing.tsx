@@ -36,6 +36,7 @@ export function FullListing(){
       )
 
     const displayableListing = listing as ListingItem
+    const displayableMedia = displayableListing.contents as any
       
     return(
         <>
@@ -44,6 +45,9 @@ export function FullListing(){
         }
         {
             displayableListing.post_desc
+        }
+        {
+            <img src={displayableMedia.$values[0].media}></img>
         }
         </>
     )
