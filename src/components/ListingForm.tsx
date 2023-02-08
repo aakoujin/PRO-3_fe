@@ -1,13 +1,36 @@
-import { FormEvent, useRef } from "react";
+import { ChangeEvent, FormEvent, useRef, useState } from "react";
 import { Button, Col, Form, Row, Stack } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
+import { storage } from '../firebase';
+import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
+import {v4} from "uuid";
 
 export function ListingForm() {
+    const [imageUpload, setImageUpload] = useState<File>()
+    const [imageList, setImageList] = useState<string[]>([]);
+
     const titleRef = useRef<HTMLInputElement>(null)
     const userRef = useRef<HTMLInputElement>(null)  //to replace for automatic setup of user
     const markdownRef = useRef<HTMLTextAreaElement>(null)
 
+
     const navigate = useNavigate();
+
+    const uploadImage = () => {
+        const imageRef = ref(storage, `images/${imageUpload!.name + v4()}`)
+        uploadBytes(imageRef, imageUpload!).then((snapshot)=> {
+            getDownloadURL(snapshot.ref).then((url)=>{
+                console.log(url);
+                setImageList((prev) => [...prev, url]);
+            })
+        })
+    };
+
+    const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+        if (!e.target.files) return;
+
+        setImageUpload(e.target.files[0])
+    }
 
     async function handleSubmit(e: FormEvent) {
         e.preventDefault()
@@ -30,9 +53,10 @@ export function ListingForm() {
                     body: JSON.stringify(newListing)
                 })
 
-        console.log(result.json())
+        var createdListing = await result.json()
+        console.log(createdListing)
 
-        navigate("/");
+        navigate("/" + createdListing.id_listing); //navigate to listing view page
     }
 
     return (
@@ -49,6 +73,12 @@ export function ListingForm() {
                         <Form.Group controlId="user">
                             <Form.Label>User</Form.Label>
                             <Form.Control ref={userRef} required />
+                        </Form.Group>
+                    </Col>
+                    <Col>
+                        <Form.Group controlId="files">
+                            <input type="file" onChange={handleFileChange} />
+                            <Button onClick={uploadImage}>Upload</Button>
                         </Form.Group>
                     </Col>
                 </Row>

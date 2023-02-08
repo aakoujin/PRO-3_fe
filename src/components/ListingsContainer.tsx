@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button } from 'react-bootstrap';
+import { Button, Col, Row } from 'react-bootstrap';
 import { Content } from './Content';
 import Listing from './Listing';
 
@@ -11,11 +11,11 @@ interface ListingItem {
     post_date: string;
     state: number;
     contents: {
-        [key: string] : ContentItem
+        [key: string]: ContentItem
     }
 }
 
-interface ContentItem{
+interface ContentItem {
     id_content: number;
     media: string;
 }
@@ -25,12 +25,11 @@ interface ContentItem{
 function ListingContainer(fetchedListings: ListingItem[]) {
     return (
         <>
-            {
-               Object.values(fetchedListings).map(li => (<div key={li.id_listing}><Listing{...li}/></div>))
-            }
-            {
-                //Object.values(fetchedListings).map(li => (console.log(li as ListingItem)))
-            }
+            <Row md={2} xs={1} lg={3} className="g-3">
+                {
+                    Object.values(fetchedListings).map(li => (<Col key={li.id_listing}><Listing{...li} /></Col>))
+                }
+            </Row>
         </>
     )
 }
