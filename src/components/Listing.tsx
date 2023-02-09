@@ -8,6 +8,7 @@ export interface ListingItem {
     post_desc: string;
     post_date: string;
     state: number;
+    price: number;
     contents: {
         [key: string]: ContentItem
     }
@@ -33,8 +34,8 @@ function Listing(listing: ListingItem) {
             <Card onClick={handleClick}>
                 <CardImg variant="top" height="200px" style={{ objectFit: "cover" }} src={displayableMedia.$values[0].media} alt="placeholder" />
                 <div className='listing'>
-                    {listing.id_listing}
                     {listing.post_name}
+                    {listing.price}
                 </div>
             </Card>
         </>

@@ -2,8 +2,8 @@ import { ChangeEvent, FormEvent, useRef, useState } from "react";
 import { Button, Col, Form, Row, Stack } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { storage } from '../firebase';
-import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
-import {v4} from "uuid";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { v4 } from "uuid";
 
 export function ListingForm() {
     const [imageUpload, setImageUpload] = useState<File>()
@@ -11,6 +11,7 @@ export function ListingForm() {
 
     const titleRef = useRef<HTMLInputElement>(null)
     const userRef = useRef<HTMLInputElement>(null)  //to replace for automatic setup of user
+    const priceRef = useRef<HTMLInputElement>(null)
     const markdownRef = useRef<HTMLTextAreaElement>(null)
 
 
@@ -18,8 +19,8 @@ export function ListingForm() {
 
     const uploadImage = () => {
         const imageRef = ref(storage, `images/${imageUpload!.name + v4()}`)
-        uploadBytes(imageRef, imageUpload!).then((snapshot)=> {
-            getDownloadURL(snapshot.ref).then((url)=>{
+        uploadBytes(imageRef, imageUpload!).then((snapshot) => {
+            getDownloadURL(snapshot.ref).then((url) => {
                 console.log(url);
                 setImageList((prev) => [...prev, url]);
             })
@@ -35,7 +36,7 @@ export function ListingForm() {
     async function handleSubmit(e: FormEvent) {
         e.preventDefault()
 
-        function attachImages(){
+        function attachImages() {
             //todo multi-img 
         }
 
@@ -44,6 +45,7 @@ export function ListingForm() {
             post_desc: markdownRef.current!.value,
             post_date: "2023-02-07T14:10:05.670Z",//(new Date()).toISOString,
             state: userRef.current!.value,
+            price: priceRef.current!.value,
             contents: [{
                 media: imageList[0]
             }]
@@ -80,14 +82,20 @@ export function ListingForm() {
                         </Form.Group>
                     </Col>
                     <Col>
-                        <Form.Group controlId="files">
-                            <input type="file" onChange={handleFileChange} />
-                            <Button onClick={uploadImage}>Upload</Button>
+                        <Form.Group controlId="price">
+                            <Form.Label>Price</Form.Label>
+                            <Form.Control ref={priceRef} required/>
                         </Form.Group>
                     </Col>
                     <Row>
+                        <Col>
+                            <Form.Group controlId="files">
+                                <input type="file" onChange={handleFileChange} />
+                                <Button onClick={uploadImage}>Upload</Button>
+                            </Form.Group>
+                        </Col>
                         {imageList.map((url) => {
-                            return <img key={url} src={url}/>
+                            return <img key={url} src={url} />
                         })}
                     </Row>
                 </Row>

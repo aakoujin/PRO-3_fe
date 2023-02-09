@@ -10,6 +10,7 @@ interface ListingItem {
     post_desc: string;
     post_date: string;
     state: number;
+    price: number;
     contents: {
         [key: string]: ContentItem
     }
@@ -25,7 +26,7 @@ interface ContentItem {
 function ListingContainer(fetchedListings: ListingItem[]) {
     return (
         <>
-            <Row md={2} xs={1} lg={3} className="g-3">
+            <Row md={2} xs={1} lg={4} className="g-3">
                 {
                     Object.values(fetchedListings).map(li => (<Col key={li.id_listing}><Listing{...li} /></Col>))
                 }
