@@ -7,6 +7,8 @@ import "bootstrap/dist/css/bootstrap.min.css"
 import ListingContainer from './components/ListingsContainer';
 import { FullListing } from './components/FullListing';
 import { TopNavBar } from './components/TopNavBar';
+import Register from './components/Register';
+import Login from './components/Login';
 
 function App() {
   const [listings, setListings] = useState([])
@@ -43,7 +45,8 @@ function App() {
       <TopNavBar/>
       <Container className="mb-4">
         <Routes>
-          <Route path="/login" element={<h1>Login</h1>} ></Route>
+          <Route path="/login" element={<Login/>} ></Route>
+          <Route path="/register" element={<Register/>} ></Route>
           <Route path="/" element={<ListingContainer {...fetchedListings} />}></Route>
           <Route path="/new" element={<AddListing />}></Route>
 
