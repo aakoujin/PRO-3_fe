@@ -9,6 +9,7 @@ import { FullListing } from './components/FullListing';
 import { TopNavBar } from './components/TopNavBar';
 import Register from './components/Register';
 import Login from './components/Login';
+import { AuthProvider } from './context/AuthProvider';
 
 function App() {
   const [listings, setListings] = useState([])
@@ -42,6 +43,7 @@ function App() {
 
   return (
     <>
+    <AuthProvider>
       <TopNavBar/>
       <Container className="mb-4">
         <Routes>
@@ -59,6 +61,7 @@ function App() {
 
         </Routes>
       </Container>
+      </AuthProvider>
     </>
   );
 }

@@ -1,9 +1,16 @@
-import axios from "axios"
-import { FormEvent, useRef } from "react"
+import { FormEvent, useContext, useRef } from "react"
 import { Button, Form, Row, Stack } from "react-bootstrap"
 import { Link } from "react-router-dom"
 
+import axios from "../api/axios"
+import { AuthContext, authData } from "../context/AuthProvider"
+
+const LOGIN_URL = "/Auth/login"
+
 function Login() {
+
+
+    const authContext = useContext(AuthContext)
 
     const userLogin = useRef<HTMLInputElement>(null)
     const userPassword = useRef<HTMLInputElement>(null)
@@ -16,6 +23,7 @@ function Login() {
             userPassword: userPassword.current!.value
         }
 
+        /*
         const result =
             await axios.post("http://localhost:42999/api/Auth/login",
                 JSON.stringify(newUser),
@@ -24,8 +32,24 @@ function Login() {
                 }
             )
 
-        console.log(JSON.stringify(result))
+        console.log(JSON.stringify(result))*/
 
+        const response = await axios.post(LOGIN_URL,
+            JSON.stringify(newUser),
+            {
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
+            }
+        )
+
+        const authToken: authData = {
+            token: response.data,
+        };
+        //console.log(authToken)
+
+        authContext.setState(authToken)
+        console.log(authContext)
+    
+    
 
     }
 
