@@ -9,7 +9,8 @@ import { FullListing } from './components/FullListing';
 import { TopNavBar } from './components/TopNavBar';
 import Register from './components/Register';
 import Login from './components/Login';
-import { AuthProvider } from './context/AuthProvider';
+//import { AuthProvider } from './context/AuthProvider';
+import PersonalListings from './components/PersonalListings';
 
 function App() {
   const [listings, setListings] = useState([])
@@ -43,7 +44,6 @@ function App() {
 
   return (
     <>
-    <AuthProvider>
       <TopNavBar/>
       <Container className="mb-4">
         <Routes>
@@ -51,7 +51,7 @@ function App() {
           <Route path="/register" element={<Register/>} ></Route>
           <Route path="/" element={<ListingContainer {...fetchedListings} />}></Route>
           <Route path="/new" element={<AddListing />}></Route>
-
+          <Route path="/mylistings" element={<PersonalListings/>}></Route>
           <Route path="/:id">
             <Route path="edit" element={<h1>Edit</h1>}></Route>
             <Route index element={<FullListing />}></Route>
@@ -61,7 +61,6 @@ function App() {
 
         </Routes>
       </Container>
-      </AuthProvider>
     </>
   );
 }

@@ -1,5 +1,7 @@
+import { useContext } from "react";
 import { Card, CardImg } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthProvider";
 
 export interface ListingItem {
     id_listing: number;
@@ -24,10 +26,14 @@ export interface ContentItem {
 function Listing(listing: ListingItem) {
     const navigate = useNavigate();
 
+    const authContext = useContext(AuthContext)
+
     function handleClick() {
         navigate("/" + listing.id_listing);
     }
     const displayableMedia = listing.contents as any
+
+    //console.log(authContext.authData?.token)
 
     return (
         <>

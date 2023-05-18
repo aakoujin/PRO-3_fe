@@ -12,6 +12,9 @@ export function TopNavBar(){
                     <Nav.Link to="/new" as={NavLink}>
                         New listing
                     </Nav.Link>
+                    <Nav.Link to="/mylistings" as={NavLink}>
+                        My listings
+                    </Nav.Link>
                 </Nav>
             </Container>
         </Navbar>

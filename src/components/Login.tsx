@@ -23,31 +23,20 @@ function Login() {
             userPassword: userPassword.current!.value
         }
 
-        /*
-        const result =
-            await axios.post("http://localhost:42999/api/Auth/login",
-                JSON.stringify(newUser),
-                {
-                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
-                }
-            )
-
-        console.log(JSON.stringify(result))*/
-
         const response = await axios.post(LOGIN_URL,
             JSON.stringify(newUser),
             {
-                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                withCredentials: true
             }
         )
 
         const authToken: authData = {
             token: response.data,
         };
-        //console.log(authToken)
 
         authContext.setState(authToken)
-        console.log(authContext)
+        //console.log(authContext)
     
     
 
