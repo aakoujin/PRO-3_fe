@@ -1,3 +1,4 @@
+/*
 import { createContext, useState, ReactNode } from "react";
 
 export interface authData {
@@ -38,3 +39,63 @@ const AuthProvider = (props: any) => {
 }
 
 export { AuthContext, AuthProvider }
+*/
+
+
+import { createContext, useState, useEffect, ReactNode } from "react";
+
+export interface authData {
+  token: string;
+}
+
+interface IAuthContext {
+  authData: authData | undefined;
+  setState: (authInfo: authData) => void;
+}
+
+const AuthContext = createContext<IAuthContext>({
+  authData: undefined,
+  setState: () => {}
+});
+
+const { Provider } = AuthContext;
+
+const AuthProvider = (props: { children: ReactNode }) => {
+  const [authState, setAuthState] = useState<authData | undefined>(() => {
+    const storedToken = localStorage.getItem("authToken");
+    if (storedToken) {
+      return { token: storedToken };
+    }
+    return undefined;
+  });
+
+  useEffect(() => {
+    if (authState?.token) {
+      localStorage.setItem("authToken", authState.token);
+    } else {
+      localStorage.removeItem("authToken");
+    }
+  }, [authState]);
+
+  const setAuthInfo = (data: authData) => {
+    setAuthState({
+      token: data.token
+    });
+  };
+
+  const logout = () => {
+    setAuthState(undefined);
+  };
+
+  return (
+    <Provider
+      value={{
+        authData: authState,
+        setState: (authInfo: authData) => setAuthInfo(authInfo)
+      }}
+      {...props}
+    />
+  );
+};
+
+export { AuthContext, AuthProvider };
