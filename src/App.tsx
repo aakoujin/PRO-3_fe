@@ -11,6 +11,8 @@ import Register from './components/Register';
 import Login from './components/Login';
 //import { AuthProvider } from './context/AuthProvider';
 import PersonalListings from './components/PersonalListings';
+import UserInfoComponent from './components/UserInfoComponent';
+import EditUserInfoComponent from './components/EditUserInfoComponent';
 
 function App() {
   const [listings, setListings] = useState([])
@@ -56,6 +58,9 @@ function App() {
             <Route path="edit" element={<h1>Edit</h1>}></Route>
             <Route index element={<FullListing />}></Route>
           </Route>
+          <Route path="/userInfo" element={<UserInfoComponent/>} ></Route>
+          <Route path="/editUserInfo" element={<EditUserInfoComponent/>}> </Route>
+
 
           <Route path="*" element={<Navigate to="/" />}></Route>
 
