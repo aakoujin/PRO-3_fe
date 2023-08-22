@@ -21,8 +21,9 @@ export function ListingForm() {
     const authContext = useContext(AuthContext)
     const defaultTheme = createTheme();
 
-    const [imageUpload, setImageUpload] = useState<File>()
-    const [imageList, setImageList] = useState<string[]>([]);
+    const [images, setImages] = useState<File[] | undefined>();
+    const [urls, setUrls] = useState<string[]>([]);
+
 
     const titleRef = useRef<HTMLInputElement>(null)
     const userRef = useRef<HTMLInputElement>(null)  //to replace for automatic setup of user
@@ -32,49 +33,42 @@ export function ListingForm() {
 
     const navigate = useNavigate();
 
-    const uploadImage = () => {
-        const imageRef = ref(storage, `images/${imageUpload!.name + v4()}`)
-        uploadBytes(imageRef, imageUpload!).then((snapshot) => {
-            getDownloadURL(snapshot.ref).then((url) => {
-                console.log(url);
-                setImageList((prev) => [...prev, url]);
-            })
-        })
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files) {
+            for (let i = 0; i < e.target.files.length; i++) {
+                const newImage = e.target.files[i];
+                setImages((prevState: File[] | undefined) => [...(prevState || []), newImage]);
+            }
+        }
     };
 
-    const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-        if (!e.target.files) return;
+    const handleUpload = () => {
+        images?.map((image) => {
+            const imageRef = ref(storage, `images/${image!.name + v4()}`)
+            uploadBytes(imageRef, image!).then((snapshot) => {
+                getDownloadURL(snapshot.ref).then((url) => {
+                    console.log(url);
+                    setUrls((prev) => [...prev, url]);
+                })
+            })
 
-        setImageUpload(e.target.files[0])
+        })
     }
 
     async function handleSubmit(e: FormEvent) {
         e.preventDefault()
 
-        function attachImages() {
-            //todo multi-img 
-        }
+        const contents = urls.map((url) => {
+            return {media: url}
+        })
 
         const newListing = {
             post_name: titleRef.current!.value,
             post_desc: markdownRef.current!.value,
             post_date: "2023-02-07T14:10:05.670Z",//(new Date()).toISOString,
             price: priceRef.current!.value,
-            contents: [{
-                media: imageList[0]
-            }]
+            contents
         }
-        /*
-                const res =
-                    await fetch("http://localhost:42999/api/Listing",
-                        {
-                            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                            method: 'POST',
-                            body: JSON.stringify(newListing)
-                        })
-        
-                var createdListing = await res.json()
-                console.log(createdListing)*/
 
         const result =
             await axios.post("http://localhost:42999/api/Listing",
@@ -127,11 +121,10 @@ export function ListingForm() {
                             </Grid>
                             <Grid item xs={1}>
                                 <Form.Group controlId="files">
-                                    <input type="file" onChange={handleFileChange} />
+                                    <input type="file" multiple onChange={handleChange} />
                                     <Button
-                                        
                                         variant="contained"
-                                        onClick={uploadImage}
+                                        onClick={handleUpload}
                                         sx={{ mt: 3, mb: 2 }}
                                     >
                                         Upload
@@ -139,7 +132,7 @@ export function ListingForm() {
                                 </Form.Group>
                                 <Grid item xs={12} sm={6}>
                                     <ImageList sx={{ width: 830, height: 150 }} cols={6} rowHeight={124}>
-                                        {imageList.map((item) => (
+                                        {urls.map((item) => (
                                             <ImageListItem key={item}>
                                                 <img
                                                     src={`${item}?w=124&h=124&fit=crop&auto=format`}
@@ -173,46 +166,3 @@ export function ListingForm() {
         </>
     )
 }
-
-/*
-<Form onSubmit={handleSubmit}>
-                <Stack gap={4}>
-                    <Row>
-                        <Col>
-                            <Form.Group controlId="title">
-                                <Form.Label>Title</Form.Label>
-                                <Form.Control ref={titleRef} required />
-                            </Form.Group>
-                        </Col>
-                        <Col>
-                            <Form.Group controlId="price">
-                                <Form.Label>Price</Form.Label>
-                                <Form.Control ref={priceRef} required />
-                            </Form.Group>
-                        </Col>
-                        <Row>
-                            <Col>
-                                <Form.Group controlId="files">
-                                    <input type="file" onChange={handleFileChange} />
-                                    <Button onClick={uploadImage}>Upload</Button>
-                                </Form.Group>
-                            </Col>
-                            {imageList.map((url) => {
-                                return <img key={url} src={url} />
-                            })}
-                        </Row>
-                    </Row>
-                    <Row>
-                        <Form.Group controlId="markdown">
-                            <Form.Label>Description</Form.Label>
-                            <Form.Control ref={markdownRef} required as="textarea" rows={15} />
-                        </Form.Group>
-                    </Row>
-                    <Stack direction="horizontal" gap={2} className="justify-content-end">
-                        <Button type="submit" variant="primary">Save</Button>
-                        <Link to="..">
-                            <Button type="button" variant="outline-secondary">Cancel</Button>
-                        </Link>
-                    </Stack>
-                </Stack>
-            </Form>*/

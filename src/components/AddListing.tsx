@@ -4,7 +4,6 @@ function AddListing() {
 
     return (
         <>
-            <h1>New Listing</h1>
             <ListingForm />
         </>)
 

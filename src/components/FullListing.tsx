@@ -70,7 +70,6 @@ export function FullListing() {
     );
   }
 
-  console.log(displayableMedia.$values[currentPictureIndex])
   return (
     <Container>
     <Paper elevation={3} style={{ padding: "20px" }}>

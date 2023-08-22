@@ -9,7 +9,6 @@ const P_LISTING_URL = "/Listing/userlistings"
 function PersonalListings() {
 
     const authContext = useContext(AuthContext)
-    console.log(authContext.authData)
 
     const [listings, setListings] = useState([])
     const [loading, setLoading] = useState(true)
