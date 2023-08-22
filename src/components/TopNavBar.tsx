@@ -1,22 +1,90 @@
-import { Container, Nav, Navbar } from "react-bootstrap";
-import { NavLink } from "react-router-dom";
+import React, { useContext, useState } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
+import {
+    AppBar,
+    Toolbar,
+    IconButton,
+    Menu,
+    MenuItem,
+    Button,
+    Link,
+    Container,
+} from '@mui/material';
+import { AccountCircle } from '@mui/icons-material';
+import { AuthContext } from "../context/AuthProvider"
 
-export function TopNavBar(){
-    return(
-        <Navbar className="bg-white shadow-sm mb-3">
+export function TopNavBar() {
+    const authContext = useContext(AuthContext);
+
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
+    const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleMenuClose = () => {
+        setAnchorEl(null);
+    };
+
+    return (
+        <AppBar style={{ background: "lightgray", color: "black", marginBottom: '20px'}} position="static">
             <Container>
-                <Nav className="me-auto">
-                    <Nav.Link to="/" as={NavLink}>
-                        Home
-                    </Nav.Link>
-                    <Nav.Link to="/new" as={NavLink}>
-                        New listing
-                    </Nav.Link>
-                    <Nav.Link to="/mylistings" as={NavLink}>
-                        My listings
-                    </Nav.Link>
-                </Nav>
+                <Toolbar style={{maxWidth: "true"}}>
+                    <div>
+                        <Link component={RouterLink} to="/" color="inherit" underline="none" style={{ marginLeft: '20px', marginRight: '20px' }}>
+                            Home
+                        </Link>
+                        <Link component={RouterLink} to="/about" color="inherit" underline="none" style={{ marginLeft: '20px', marginRight: '20px' }}>
+                            About
+                        </Link>
+                    </div>
+                    <div style={{ marginLeft: 'auto' }}>
+                        {authContext.authData?.token ? (
+                            <>
+                                <Link component={RouterLink} to="/new" color="inherit" underline="none" style={{ marginLeft: '20px' }}>
+                                    New listing
+                                </Link>
+                                <Link component={RouterLink} to="/mylistings" color="inherit" underline="none" style={{ marginLeft: '20px' }}>
+                                    My listings
+                                </Link>
+                            </>
+                        ) : (<></>
+                        )}
+                        <IconButton color="inherit" onClick={handleMenuOpen}>
+                            <AccountCircle />
+                        </IconButton>
+                        <Menu
+                            anchorEl={anchorEl}
+                            anchorOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                            }}
+                            open={Boolean(anchorEl)}
+                            onClose={handleMenuClose}
+                        >
+                            {authContext.authData?.token ? (
+                                [
+                                    <MenuItem key="account" component={RouterLink} to="/userInfo" onClick={handleMenuClose}>
+                                        My account
+                                    </MenuItem>,
+                                    <MenuItem key="logout" component={RouterLink} to="/logout" onClick={handleMenuClose}>
+                                        Logout
+                                    </MenuItem>
+                                ]
+                            ) : (
+                                [
+                                    <MenuItem key="login" component={RouterLink} to="/login" onClick={handleMenuClose}>
+                                        Login
+                                    </MenuItem>,
+                                    <MenuItem key="register" component={RouterLink} to="/register" onClick={handleMenuClose}>
+                                        Register
+                                    </MenuItem>
+                                ]
+                            )}
+                        </Menu>
+                    </div>
+                </Toolbar>
             </Container>
-        </Navbar>
-    )
+        </AppBar>
+    );
 }
