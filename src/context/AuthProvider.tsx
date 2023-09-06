@@ -64,6 +64,7 @@ const AuthProvider = (props: { children: ReactNode }) => {
   const [authState, setAuthState] = useState<authData | undefined>(() => {
     const storedToken = localStorage.getItem("authToken");
     if (storedToken) {
+      //add expiration check
       return { token: storedToken };
     }
     return undefined;
