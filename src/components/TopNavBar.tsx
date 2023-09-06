@@ -47,6 +47,9 @@ export function TopNavBar() {
                                 <Link component={RouterLink} to="/mylistings" color="inherit" underline="none" style={{ marginLeft: '20px' }}>
                                     My listings
                                 </Link>
+                                <Link component={RouterLink} to="/savedlistings" color="inherit" underline="none" style={{ marginLeft: '20px' }}>
+                                    Saved
+                                </Link>
                             </>
                         ) : (<></>
                         )}

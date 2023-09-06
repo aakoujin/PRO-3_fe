@@ -14,6 +14,7 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
+import { Paper } from "@mui/material";
 
 
 export function ListingForm() {
@@ -59,7 +60,7 @@ export function ListingForm() {
         e.preventDefault()
 
         const contents = urls.map((url) => {
-            return {media: url}
+            return { media: url }
         })
 
         const newListing = {
@@ -87,82 +88,83 @@ export function ListingForm() {
     return (
         <>
             <ThemeProvider theme={defaultTheme}>
-                <Container component="main" maxWidth="md">
-                    <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
-                        <Grid container spacing={2}>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    autoComplete="given-title"
-                                    name="title"
-                                    required
-                                    fullWidth
-                                    id="title"
-                                    label="Title"
-                                    autoFocus
-                                    inputRef={titleRef}
-                                />
-                            </Grid>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    required
-                                    fullWidth
-                                    id="price"
-                                    label="Price"
-                                    name="price"
-                                    autoComplete="given-price"
-                                    inputRef={priceRef}
-                                />
-                            </Grid>
-                            <Grid item xs={12} md={24}>
-                                <Form.Group controlId="markdown">
-                                    <Form.Label>Description</Form.Label>
-                                    <Form.Control ref={markdownRef} required as="textarea" rows={5} />
-                                </Form.Group>
-                            </Grid>
-                            <Grid item xs={1}>
-                                <Form.Group controlId="files">
-                                    <input type="file" multiple onChange={handleChange} />
-                                    <Button
-                                        variant="contained"
-                                        onClick={handleUpload}
-                                        sx={{ mt: 3, mb: 2 }}
-                                    >
-                                        Upload
-                                    </Button>
-                                </Form.Group>
+                <Paper elevation={3} style={{ padding: "20px" }}>
+                    <Container component="main" maxWidth="lg">
+                        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+                            <Grid container spacing={2}>
                                 <Grid item xs={12} sm={6}>
-                                    <ImageList sx={{ width: 830, height: 150 }} cols={6} rowHeight={124}>
-                                        {urls.map((item) => (
-                                            <ImageListItem key={item}>
-                                                <img
-                                                    src={`${item}?w=124&h=124&fit=crop&auto=format`}
-                                                    srcSet={`${item}?w=124&h=124&fit=crop&auto=format&dpr=2 2x`}
-                                                    alt={item}
-                                                    loading="lazy"
-                                                />
-                                            </ImageListItem>
-                                        ))}
-                                    </ImageList>
+                                    <TextField
+                                        autoComplete="given-title"
+                                        name="title"
+                                        required
+                                        fullWidth
+                                        id="title"
+                                        label="Title"
+                                        autoFocus
+                                        inputRef={titleRef}
+                                    />
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        required
+                                        fullWidth
+                                        id="price"
+                                        label="Price"
+                                        name="price"
+                                        autoComplete="given-price"
+                                        inputRef={priceRef}
+                                    />
+                                </Grid>
+                                <Grid item xs={12} md={24}>
+                                    <Form.Group controlId="markdown">
+                                        <Form.Label>Description</Form.Label>
+                                        <Form.Control ref={markdownRef} required as="textarea" rows={5} />
+                                    </Form.Group>
+                                </Grid>
+                                <Grid item xs={1}>
+                                    <Form.Group controlId="files">
+                                        <input type="file" multiple onChange={handleChange} />
+                                        <Button
+                                            variant="contained"
+                                            onClick={handleUpload}
+                                            sx={{ mt: 3, mb: 2 }}
+                                        >
+                                            Upload
+                                        </Button>
+                                    </Form.Group>
+                                    <Grid item xs={12} sm={6}>
+                                        <ImageList sx={{ width: 830, height: 150 }} cols={6} rowHeight={124}>
+                                            {urls.map((item) => (
+                                                <ImageListItem key={item}>
+                                                    <img
+                                                        src={`${item}?w=124&h=124&fit=crop&auto=format`}
+                                                        srcSet={`${item}?w=124&h=124&fit=crop&auto=format&dpr=2 2x`}
+                                                        alt={item}
+                                                        loading="lazy"
+                                                    />
+                                                </ImageListItem>
+                                            ))}
+                                        </ImageList>
+                                    </Grid>
                                 </Grid>
                             </Grid>
-                        </Grid>
-                        <Button
-                            type="submit"
-                            variant="contained"
-                            onClick={handleSubmit}
-                            sx={{ mt: 3, mb: 2 }}
-                        >
-                            Submit
-                        </Button>
-                        <Grid container justifyContent="flex-end">
-                            <Grid item>
+                            <Button
+                                type="submit"
+                                variant="contained"
+                                onClick={handleSubmit}
+                                sx={{ mt: 3, mb: 2 }}
+                            >
+                                Submit
+                            </Button>
+                            <Grid container justifyContent="flex-end">
+                                <Grid item>
+                                </Grid>
                             </Grid>
-                        </Grid>
-                    </Box>
+                        </Box>
 
-                </Container>
+                    </Container>
+                </Paper>
             </ThemeProvider>
-
         </>
     )
 }

@@ -13,6 +13,7 @@ import Login from './components/Login';
 import PersonalListings from './components/PersonalListings';
 import UserInfoComponent from './components/UserInfoComponent';
 import EditUserInfoComponent from './components/EditUserInfoComponent';
+import SavedListings from './components/SavedListings';
 
 function App() {
   const [listings, setListings] = useState([])
@@ -60,7 +61,7 @@ function App() {
           </Route>
           <Route path="/userInfo" element={<UserInfoComponent/>} ></Route>
           <Route path="/editUserInfo" element={<EditUserInfoComponent/>}> </Route>
-
+          <Route path="/savedlistings" element={<SavedListings/>}></Route>
 
           <Route path="*" element={<Navigate to="/" />}></Route>
 
