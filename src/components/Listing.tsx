@@ -19,12 +19,22 @@ export interface ListingItem {
     price: number;
     contents: {
         [key: string]: ContentItem
-    }
+    };
+    tags : [
+    $id: string,
+    $values: TagItem[]
+    ];
 }
 
 export interface ContentItem {
     id_content: number;
     media: string;
+}
+
+export interface TagItem{
+  id_tag: number;
+  id_parent: number;
+  tag_name: string;
 }
 
 

@@ -6,14 +6,17 @@ import {
   Container,
   Paper,
   Grid,
-  IconButton
+  IconButton,
+  ListItem,
+  ListItemText
 } from "@mui/material";
 import { ArrowBack, ArrowForward } from "@mui/icons-material";
-import { ListingItem } from "./Listing";
+import { ListingItem, TagItem } from "./Listing";
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import { AuthContext } from "../context/AuthProvider"
 import axios from "../api/axios"
+import SimilarListingsContainer from "./SimilarListingsContainer";
 
 
 export interface ListingAuthor {
@@ -32,6 +35,7 @@ export function FullListing() {
   const [currentPictureIndex, setCurrentPictureIndex] = useState(0);
   const [author, setAuthor] = useState<ListingAuthor | null>(null);
   const [isSaved, setIsSaved] = useState(false);
+  const [tags, setTags] = useState<TagItem[] | null>(null);
 
   useEffect(() => {
     fetchListing();
@@ -72,6 +76,7 @@ export function FullListing() {
     setListing(returnedListing);
     setAuthor(returnedAuthor)
     setLoading(false);
+    setTags(returnedListing.tags.$values)
   };
 
   async function handleAddToBookmarkClick() {
@@ -139,6 +144,9 @@ export function FullListing() {
   const displayableMedia = displayableListing.contents as any
   const displayableAuthor = author as ListingAuthor
 
+  //const dispTags = displayableListing.tags as any
+
+
   if (!listing) {
     return (
       <Container>
@@ -177,6 +185,13 @@ export function FullListing() {
           <Grid item xs={12} marginTop={2}>
             <Typography variant="body1">Price: ${displayableListing.price}</Typography>
           </Grid>
+          <>
+            {tags!.map((tagItem) => (
+              <div key={tagItem.id_tag} style={{ border: '1px solid black', padding: '5px', margin: '5px' }}>
+                {tagItem.tag_name}
+              </div>
+            ))}
+          </>
           <Grid item xs={12}>
             <Typography variant="body1">{displayableListing.post_desc}</Typography>
           </Grid>
@@ -208,6 +223,13 @@ export function FullListing() {
           </Grid>
         </Grid>
       </Paper>
+      <Paper>
+        <>
+          <SimilarListingsContainer id={listing.id_listing} />
+        </>
+
+      </Paper>
     </Container>
   );
 }
+// <SimilarListingsContainer currentListing={listing.id_listing} />

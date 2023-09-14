@@ -86,6 +86,7 @@ const AuthProvider = (props: { children: ReactNode }) => {
 
   const logout = () => {
     setAuthState(undefined);
+    localStorage.removeItem("authToken");
   };
 
   return (

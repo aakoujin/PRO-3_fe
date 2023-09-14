@@ -13,7 +13,11 @@ interface ListingItem {
     price: number;
     contents: {
         [key: string]: ContentItem
-    }
+    };
+    tags : [
+        $id: string,
+        $values: TagItem[]
+        ];
 }
 
 interface ContentItem {
@@ -21,6 +25,11 @@ interface ContentItem {
     media: string;
 }
 
+export interface TagItem{
+    id_tag: number;
+    id_parent: number;
+    tag_name: string;
+  }
 
 
 function ListingContainer(fetchedListings: ListingItem[]) {
