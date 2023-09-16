@@ -16,7 +16,9 @@ import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import { AuthContext } from "../context/AuthProvider"
 import axios from "../api/axios"
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import SimilarListingsContainer from "./SimilarListingsContainer";
+
 
 
 export interface ListingAuthor {
@@ -36,6 +38,7 @@ export function FullListing() {
   const [author, setAuthor] = useState<ListingAuthor | null>(null);
   const [isSaved, setIsSaved] = useState(false);
   const [tags, setTags] = useState<TagItem[] | null>(null);
+  const [similar, setSimilar] = useState<ListingItem[] | null>(null);
 
   useEffect(() => {
     fetchListing();
@@ -69,6 +72,13 @@ export function FullListing() {
         }
       )
 
+    const similarListings =
+      await axios.get("/Listing/similar/" + params.id,
+        {
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
+        }
+      )
+
     var checked = await saved.data
     if (checked == params.id) { setIsSaved(true) }
     else { setIsSaved(false) }
@@ -77,6 +87,7 @@ export function FullListing() {
     setAuthor(returnedAuthor)
     setLoading(false);
     setTags(returnedListing.tags.$values)
+    setSimilar(similarListings.data.$values);
   };
 
   async function handleAddToBookmarkClick() {
@@ -143,8 +154,6 @@ export function FullListing() {
   const displayableListing = listing as ListingItem
   const displayableMedia = displayableListing.contents as any
   const displayableAuthor = author as ListingAuthor
-
-  //const dispTags = displayableListing.tags as any
 
 
   if (!listing) {
@@ -221,15 +230,18 @@ export function FullListing() {
               Contact: +380 {displayableAuthor.phonenumber}
             </Typography>
           </Grid>
+          <Grid item xs={12}>
+            <Typography variant="body2">
+              <VisibilityIcon
+                style={{ color: 'gray' }} />
+              : {displayableListing.state}
+            </Typography>
+          </Grid>
         </Grid>
       </Paper>
-      <Paper>
-        <>
-          <SimilarListingsContainer id={listing.id_listing} />
-        </>
-
+      <Paper elevation={3} style={{ padding: "20px", marginTop: "10px" }}>
+        <SimilarListingsContainer similarListings={similar} />
       </Paper>
     </Container>
   );
 }
-// <SimilarListingsContainer currentListing={listing.id_listing} />
