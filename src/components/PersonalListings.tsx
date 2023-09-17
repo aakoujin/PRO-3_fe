@@ -30,7 +30,7 @@ function PersonalListings() {
             }
         )
         const listings = response.data
-        setListings(listings.$values)
+        setListings(listings)
         setLoading(false)
     }
 

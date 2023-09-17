@@ -3,7 +3,7 @@ import { Button, Col, Row } from 'react-bootstrap';
 import { Content } from './Content';
 import Listing from './Listing';
 
-interface ListingItem {
+export interface ListingItem {
     id_listing: number;
     user: number;
     post_name: string;
@@ -14,10 +14,7 @@ interface ListingItem {
     contents: {
         [key: string]: ContentItem
     };
-    tags : [
-        $id: string,
-        $values: TagItem[]
-        ];
+    tags : TagItem[];
 }
 
 interface ContentItem {

@@ -18,7 +18,6 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import SimilarListingsContainer from "./SimilarListingsContainer";
 
 
-
 export interface ListingAuthor {
   name: string;
   surname: string;
@@ -84,8 +83,8 @@ export function FullListing() {
     setListing(returnedListing);
     setAuthor(returnedAuthor)
     setLoading(false);
-    setTags(returnedListing.tags.$values)
-    setSimilar(similarListings.data.$values);
+    setTags(returnedListing.tags)
+    setSimilar(similarListings.data);
   };
 
   async function handleAddToBookmarkClick() {
@@ -131,13 +130,13 @@ export function FullListing() {
 
   const goToPreviousPicture = () => {
     setCurrentPictureIndex((prevIndex) =>
-      prevIndex === 0 ? displayableMedia.$values.length - 1 : prevIndex - 1
+      prevIndex === 0 ? displayableMedia.length - 1 : prevIndex - 1
     );
   };
 
   const goToNextPicture = () => {
     setCurrentPictureIndex((prevIndex) =>
-      prevIndex === displayableMedia.$values.length - 1 ? 0 : prevIndex + 1
+      prevIndex === displayableMedia.length - 1 ? 0 : prevIndex + 1
     );
   };
 
@@ -152,8 +151,6 @@ export function FullListing() {
   const displayableListing = listing as ListingItem
   const displayableMedia = displayableListing.contents as any
   const displayableAuthor = author as ListingAuthor
-
-  console.log(displayableListing.tags)
 
 
   if (!listing) {
@@ -172,14 +169,14 @@ export function FullListing() {
             <Typography variant="h5">{displayableListing.post_name}</Typography>
           </Grid>
           <Grid item xs={12}>
-            {displayableMedia && displayableMedia.$values.length > 0 && (
+            {displayableMedia && displayableMedia.length > 0 && (
               <Grid item xs={12}>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
                   <IconButton onClick={goToPreviousPicture}>
                     <ArrowBack />
                   </IconButton>
                   <img
-                    src={displayableMedia.$values[currentPictureIndex].media}
+                    src={displayableMedia[currentPictureIndex].media}
                     alt={`Picture ${currentPictureIndex + 1}`}
                     style={{ maxWidth: "100%", maxHeight: "400px" }}
                   />

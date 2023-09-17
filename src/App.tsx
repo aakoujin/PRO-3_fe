@@ -35,7 +35,7 @@ function App() {
           method: 'GET'
         })
     const listings = await result.json()
-    setListings(listings.$values)
+    setListings(listings)
     setLoading(false)
   }
 

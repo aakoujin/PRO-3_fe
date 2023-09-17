@@ -30,7 +30,7 @@ function SavedListings() {
             }
         )
         const listings = response.data
-        setListings(listings.$values)
+        setListings(listings)
         setLoading(false)
     }
 

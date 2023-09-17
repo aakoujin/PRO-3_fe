@@ -52,13 +52,11 @@ export function CategorySelector({ onCategoriesSelected }: CategorySelectorProps
   }
 
   const handleCategoryClick = async (categoryName: string) => {
-    // Make a request to fetch subtags based on the selected category name
     axios
       .get(`Tag/getSubTags/${categoryName}`)
       .then(async (response) => {
-        // Handle the response and set the subtags state
         setSelectedCategory([]);
-        setSubtags(await response.data.$values);
+        setSubtags(await response.data);
         setSelectedCategory((prevSelectedCategories) => [
           ...prevSelectedCategories,
           categoryName,
@@ -70,12 +68,10 @@ export function CategorySelector({ onCategoriesSelected }: CategorySelectorProps
   };
 
   const handleSubCategoryClick = async (categoryName: string) => {
-    // Make a request to fetch subtags based on the selected category name
     axios
       .get(`Tag/getSubTags/${categoryName}`)
       .then(async (response) => {
-        // Handle the response and set the subtags state
-        setFinalTags(await response.data.$values);
+        setFinalTags(await response.data);
         setSelectedCategory((prevSelectedCategories) => [
           ...prevSelectedCategories,
           categoryName,

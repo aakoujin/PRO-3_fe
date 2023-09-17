@@ -1,11 +1,9 @@
-import { Component, useState, useEffect } from 'react';
-import axios from "../api/axios"
-import { ListingItem, ContentItem } from "./Listing"
-import Listing from './Listing';
-import { Col, Row } from 'react-bootstrap';
-import { Button, Container, Grid, IconButton, Typography } from '@mui/material';
+import { useState } from 'react';
+import Listing, { ListingItem } from "./Listing"
+import { Container, Grid, IconButton, Typography } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import { useNavigate } from 'react-router-dom';
 
 export interface TagItem {
     id_tag: number;
@@ -20,6 +18,8 @@ interface SimilarListingsContainerProps {
 export function SimilarListingsContainer({ similarListings }: SimilarListingsContainerProps) {
     const [startIndex, setStartIndex] = useState(0);
 
+    const navigate = useNavigate();
+    
     const nextItem = () => {
         setStartIndex((prevIndex) =>
             prevIndex === similarListings.length - 1 ? 0 : prevIndex + 1
@@ -32,6 +32,10 @@ export function SimilarListingsContainer({ similarListings }: SimilarListingsCon
         );
     };
 
+    function handleClick(id: number) {
+        navigate("/" + id);
+        window.location.reload();
+    }
 
 
     const visibleItems = similarListings.slice(startIndex, startIndex + 4);
@@ -56,7 +60,7 @@ export function SimilarListingsContainer({ similarListings }: SimilarListingsCon
                 </Grid>
                 <Grid container spacing={2}>
                     {visibleItems.map((item) => (
-                        <Grid item key={item.id_listing} xs={3}>
+                        <Grid item key={item.id_listing} xs={3}  onClick={() => handleClick(item.id_listing)}>
                             <Listing{...item} />
                         </Grid>
                     ))}
