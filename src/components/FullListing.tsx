@@ -6,9 +6,7 @@ import {
   Container,
   Paper,
   Grid,
-  IconButton,
-  ListItem,
-  ListItemText
+  IconButton
 } from "@mui/material";
 import { ArrowBack, ArrowForward } from "@mui/icons-material";
 import { ListingItem, TagItem } from "./Listing";
@@ -155,6 +153,8 @@ export function FullListing() {
   const displayableMedia = displayableListing.contents as any
   const displayableAuthor = author as ListingAuthor
 
+  console.log(displayableListing.tags)
+
 
   if (!listing) {
     return (
@@ -192,7 +192,7 @@ export function FullListing() {
           </Grid>
 
           <Grid item xs={12} marginTop={2}>
-            <Typography variant="body1">Price: ${displayableListing.price}</Typography>
+            <Typography key={displayableListing.price} variant="body1">Price: ${displayableListing.price}</Typography>
           </Grid>
           <>
             {tags!.map((tagItem) => (

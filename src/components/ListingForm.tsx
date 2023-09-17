@@ -15,6 +15,8 @@ import TextField from '@mui/material/TextField';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import { Paper } from "@mui/material";
+import {CategorySelector} from "./CategorySelector"
+import { TagItem } from "./Listing";
 
 
 export function ListingForm() {
@@ -24,7 +26,7 @@ export function ListingForm() {
 
     const [images, setImages] = useState<File[] | undefined>();
     const [urls, setUrls] = useState<string[]>([]);
-
+    const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
     const titleRef = useRef<HTMLInputElement>(null)
     const userRef = useRef<HTMLInputElement>(null)  //to replace for automatic setup of user
@@ -33,6 +35,11 @@ export function ListingForm() {
 
 
     const navigate = useNavigate();
+
+    const handleCategoriesSelected = (selectedCategories: string[]) => {
+        setSelectedTags(selectedCategories);
+        console.log('Selected categories:', selectedCategories);
+      };
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
@@ -63,12 +70,17 @@ export function ListingForm() {
             return { media: url }
         })
 
+        const tags = selectedTags.map((t) => {
+            return {tag_name: t}
+        })
+
         const newListing = {
             post_name: titleRef.current!.value,
             post_desc: markdownRef.current!.value,
             post_date: "2023-02-07T14:10:05.670Z",//(new Date()).toISOString,
             price: priceRef.current!.value,
-            contents
+            contents,
+            tags
         }
 
         const result =
@@ -92,6 +104,18 @@ export function ListingForm() {
                     <Container component="main" maxWidth="lg">
                         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
                             <Grid container spacing={2}>
+                                <Grid item xs={12} sm={6}>
+                                    <CategorySelector onCategoriesSelected={handleCategoriesSelected}/>
+
+                                </Grid>
+
+                                <Grid item xs={12} sm={6}>
+                                    {Object.values(selectedTags).map(t => (
+                                    <div key={t}>
+                                        {t}
+                                    </div>))}
+                                </Grid>
+
                                 <Grid item xs={12} sm={6}>
                                     <TextField
                                         autoComplete="given-title"
