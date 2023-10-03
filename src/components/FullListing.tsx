@@ -16,12 +16,14 @@ import { AuthContext } from "../context/AuthProvider"
 import axios from "../api/axios"
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import SimilarListingsContainer from "./SimilarListingsContainer";
+import ContactSeller from "./ContactSeller";
 
 
 export interface ListingAuthor {
   name: string;
   surname: string;
   phonenumber: string;
+  username: string;
 }
 
 export function FullListing() {
@@ -36,6 +38,7 @@ export function FullListing() {
   const [isSaved, setIsSaved] = useState(false);
   const [tags, setTags] = useState<TagItem[] | null>(null);
   const [similar, setSimilar] = useState<ListingItem[] | null>(null);
+  const [authorId, setAuthorId] = useState();
 
   useEffect(() => {
     fetchListing();
@@ -51,6 +54,7 @@ export function FullListing() {
       }
     );
     const returnedListing = await result.json();
+    setAuthorId(returnedListing.id_user);
 
     const author = await fetch(
       "http://localhost:42999/api/User/postedby/" + returnedListing.id_user,
@@ -226,6 +230,15 @@ export function FullListing() {
             <Typography variant="body1">
               Contact: +380 {displayableAuthor.phonenumber}
             </Typography>
+          </Grid>
+          <Grid item xs={12}>
+            {authContext.authData?.token ? (
+              <ContactSeller username={author.username} listing={listing.id_listing} authorId={authorId} />
+            ) :
+              (
+                <></>
+              )}
+
           </Grid>
           <Grid item xs={12}>
             <Typography variant="body2">

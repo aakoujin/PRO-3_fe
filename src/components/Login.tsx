@@ -17,6 +17,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 import axios from "../api/axios"
 import { AuthContext, authData } from "../context/AuthProvider"
+import { useNavigate } from "react-router-dom";
 
 const LOGIN_URL = "/Auth/login"
 
@@ -28,6 +29,7 @@ function Login() {
     const userLogin = useRef<HTMLInputElement>(null)
     const userPassword = useRef<HTMLInputElement>(null)
     const defaultTheme = createTheme();
+    const navigate = useNavigate();
 
     async function handleSubmit(e: FormEvent) {
         e.preventDefault()
@@ -53,10 +55,7 @@ function Login() {
 
 
         authContext.setState(authToken)
-        //console.log(authContext)
-
-
-
+        navigate("/");
     }
 
     return (

@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import {
     AppBar,
     Toolbar,
@@ -15,6 +15,7 @@ import { AuthContext } from "../context/AuthProvider"
 
 export function TopNavBar() {
     const authContext = useContext(AuthContext);
+    const { authData, setState} = useContext(AuthContext);
 
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -25,6 +26,14 @@ export function TopNavBar() {
     const handleMenuClose = () => {
         setAnchorEl(null);
     };
+
+    const handleLogout = () => {
+        if (setState) {
+          setState({ token: "" });
+          localStorage.removeItem("authToken");
+        }
+        handleMenuClose();
+      };
 
     return (
         <AppBar style={{ background: "lightgray", color: "black", marginBottom: '20px'}} position="static">
@@ -70,7 +79,7 @@ export function TopNavBar() {
                                     <MenuItem key="account" component={RouterLink} to="/userInfo" onClick={handleMenuClose}>
                                         My account
                                     </MenuItem>,
-                                    <MenuItem key="logout" component={RouterLink} to="/logout" onClick={handleMenuClose}>
+                                    <MenuItem key="logout" component={RouterLink} to="/" onClick={handleLogout}>
                                         Logout
                                     </MenuItem>
                                 ]
