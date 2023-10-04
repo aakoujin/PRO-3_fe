@@ -3,6 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import axios from "../api/axios"
 import { AuthContext } from "../context/AuthProvider"
 import { HubConnection, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
+import Chat from "./Chat";
 
 interface ContactSellerProps {
     username: string;
@@ -23,6 +24,10 @@ const ContactSeller = ({ username, listing, authorId }: ContactSellerProps) => {
 
     const authContext = useContext(AuthContext);
 
+    useEffect(() => {
+        fetchConnection();
+      }, []);
+
     const fetchConnection = async () => {
         const data = {
             username: username,
@@ -40,11 +45,27 @@ const ContactSeller = ({ username, listing, authorId }: ContactSellerProps) => {
         setChatConnectionString(await result.data.chatConnectionString)
         setCurrectUser(await result.data.chatConnectionString.split('_')[0])
 
-        joinRoom(await result.data.chatConnectionString);
+        //joinRoom(await result.data.chatConnectionString);
     }
 
-    const joinRoom = async (chatConnectionString) => {
+    const joinRoom = async () => {
         try {
+            const data = {
+                username: username,
+                listing: listing
+            }
+
+            const result =
+            await axios.post("/Chat/registerRoom",
+                JSON.stringify(data),
+                {
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'Authorization': `Bearer ${authContext.authData?.token}` },
+                    withCredentials: true
+                }
+            )
+
+            console.log("Registered chatRoom: " + await result.data)
+
             const connection = new HubConnectionBuilder()
                 .withUrl("http://localhost:42999/chat")
                 .configureLogging(LogLevel.Information)
@@ -52,6 +73,7 @@ const ContactSeller = ({ username, listing, authorId }: ContactSellerProps) => {
 
             connection.on("ReceiveMessage", (currentUser, message) => {
                 setMessages(messages => [...messages, { currentUser, message }])
+                console.log(messages);
             });
 
             await connection.start();
@@ -64,13 +86,26 @@ const ContactSeller = ({ username, listing, authorId }: ContactSellerProps) => {
         }
     }
 
+    const sendMessage = async (message) => {
+        try{
+            await connection.invoke("SendMessage", message);
+
+        }catch(e){
+            console.log(e)
+        }
+    }
+
     return (
         <>
-            {authorId != currentUser ? (
+            {authorId !== currentUser ? (
                 <Container>
-                    <Button onClick={fetchConnection}>
+                    <Button onClick={joinRoom}>
                         Contact seller
                     </Button>
+                    {messages.length > 0 ? (
+                        <Chat messages={messages} sendMessage={sendMessage} />
+                    ) : (<>
+                    </>)}
                 </Container>
             ) : (
                 <>
