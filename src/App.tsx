@@ -14,6 +14,8 @@ import PersonalListings from './components/PersonalListings';
 import UserInfoComponent from './components/UserInfoComponent';
 import EditUserInfoComponent from './components/EditUserInfoComponent';
 import SavedListings from './components/SavedListings';
+import UserChatsComponent from './components/UserChatsComponent';
+import ChatContainer from './components/ChatContainer';
 
 function App() {
   const [listings, setListings] = useState([])
@@ -62,6 +64,10 @@ function App() {
           <Route path="/userInfo" element={<UserInfoComponent/>} ></Route>
           <Route path="/editUserInfo" element={<EditUserInfoComponent/>}> </Route>
           <Route path="/savedlistings" element={<SavedListings/>}></Route>
+          <Route path="/chats" element={<UserChatsComponent/>}></Route>
+          <Route path="/chats/:id">
+            <Route index element={<ChatContainer />}></Route>
+          </Route>
 
           <Route path="*" element={<Navigate to="/" />}></Route>
 

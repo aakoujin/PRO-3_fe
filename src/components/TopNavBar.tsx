@@ -15,7 +15,7 @@ import { AuthContext } from "../context/AuthProvider"
 
 export function TopNavBar() {
     const authContext = useContext(AuthContext);
-    const { authData, setState} = useContext(AuthContext);
+    const { authData, setState } = useContext(AuthContext);
 
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -29,16 +29,16 @@ export function TopNavBar() {
 
     const handleLogout = () => {
         if (setState) {
-          setState({ token: "" });
-          localStorage.removeItem("authToken");
+            setState({ token: "" });
+            localStorage.removeItem("authToken");
         }
         handleMenuClose();
-      };
+    };
 
     return (
-        <AppBar style={{ background: "lightgray", color: "black", marginBottom: '20px'}} position="static">
+        <AppBar style={{ background: "lightgray", color: "black", marginBottom: '20px' }} position="static">
             <Container>
-                <Toolbar style={{maxWidth: "true"}}>
+                <Toolbar style={{ maxWidth: "true" }}>
                     <div>
                         <Link component={RouterLink} to="/" color="inherit" underline="none" style={{ marginLeft: '20px', marginRight: '20px' }}>
                             Home
@@ -78,6 +78,9 @@ export function TopNavBar() {
                                 [
                                     <MenuItem key="account" component={RouterLink} to="/userInfo" onClick={handleMenuClose}>
                                         My account
+                                    </MenuItem>,
+                                    <MenuItem key="chat" component={RouterLink} to="/chats" onClick={handleMenuClose}>
+                                        My chats
                                     </MenuItem>,
                                     <MenuItem key="logout" component={RouterLink} to="/" onClick={handleLogout}>
                                         Logout
