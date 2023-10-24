@@ -44,8 +44,33 @@ const ContactSeller = ({ username, listing, authorId }: ContactSellerProps) => {
 
         setChatConnectionString(await result.data.chatConnectionString)
         setCurrectUser(await result.data.chatConnectionString.split('_')[0])
-
+        getHistory(await result.data.chatConnectionString)
         //joinRoom(await result.data.chatConnectionString);
+    }
+
+
+    const getHistory = async (connection_string) => {
+
+        const mss = {
+            message_content: null,
+            connection_string: connection_string
+        }
+
+        var result =
+            await axios.post("/Chat/chatHistory",
+                JSON.stringify(mss),
+                {
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'Authorization': `Bearer ${authContext.authData?.token}` },
+                    withCredentials: true
+                })
+        console.log(result.data)
+
+        const transformedMessages: MessageData[] = result.data.map(item => ({
+            currentUser: parseInt(item.sender),
+            message: item.message_content
+        }));
+
+        setMessages(transformedMessages);
     }
 
     const joinRoom = async () => {
@@ -86,9 +111,23 @@ const ContactSeller = ({ username, listing, authorId }: ContactSellerProps) => {
         }
     }
 
-    const sendMessage = async (message) => {
+    const sendMessage = async (message, chatConnectionString) => {
         try{
-            await connection.invoke("SendMessage", message);
+            await connection.invoke("SendMessage", message, chatConnectionString);
+
+            const mss = {
+                message_content: message,
+                connection_string: chatConnectionString 
+            }
+
+            const result =
+            await axios.post("/Chat/saveMessage",
+                JSON.stringify(mss),
+                {
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'Authorization': `Bearer ${authContext.authData?.token}` },
+                    withCredentials: true
+                }
+            )
 
         }catch(e){
             console.log(e)
@@ -103,7 +142,7 @@ const ContactSeller = ({ username, listing, authorId }: ContactSellerProps) => {
                         Contact seller
                     </Button>
                     {messages.length > 0 ? (
-                        <Chat messages={messages} sendMessage={sendMessage} />
+                        <Chat messages={messages} chatConnectionString={chatConnectionString} sendMessage={sendMessage} />
                     ) : (<>
                     </>)}
                 </Container>

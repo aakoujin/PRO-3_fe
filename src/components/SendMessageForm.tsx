@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button, Form, FormControl, InputGroup } from "react-bootstrap";
 
 
-const SendMessageForm = ({ sendMessage }) => {
+const SendMessageForm = ({ sendMessage, chatConnectionString }) => {
     const [message, setMessage] = useState('');
 
     return (
@@ -10,7 +10,7 @@ const SendMessageForm = ({ sendMessage }) => {
             <Form
                 onSubmit={e => {
                     e.preventDefault();
-                    sendMessage(message);
+                    sendMessage(message, chatConnectionString);
                     setMessage('');
                 }}  
             >

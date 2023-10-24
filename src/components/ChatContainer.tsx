@@ -55,15 +55,42 @@ const ChatContainer = () => {
 
     useEffect(() => {
         if (chat) {
-            setCurrectUser(chat.connection_string.split('_')[0])
-            setChatConnectionString(chat.connection_string)
+            setCurrectUser(chat.connection_string.split('_')[0]);
+            setChatConnectionString(chat.connection_string);
+            getHistory(chat.connection_string);
+
             //joinRoom();
         }
     }, [chat]);
 
+
+    const getHistory = async (connection_string) => {
+
+        const mss = {
+            message_content: null,
+            connection_string: connection_string
+        }
+
+        var result =
+            await axios.post("/Chat/chatHistory",
+                JSON.stringify(mss),
+                {
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'Authorization': `Bearer ${authContext.authData?.token}` },
+                    withCredentials: true
+                })
+        console.log(result.data)
+
+        const transformedMessages: MessageData[] = result.data.map(item => ({
+            currentUser: parseInt(item.sender),
+            message: item.message_content
+        }));
+
+        setMessages(transformedMessages);
+    }
+
     const joinRoom = async () => {
         try {
-            
+
             const connection = new HubConnectionBuilder()
                 .withUrl("http://localhost:42999/chat")
                 .configureLogging(LogLevel.Information)
@@ -84,9 +111,25 @@ const ChatContainer = () => {
         }
     }
 
-    const sendMessage = async (message) => {
+
+
+    const sendMessage = async (message, chatConnectionString) => {
         try {
-            await connection.invoke("SendMessage", message);
+            await connection.invoke("SendMessage", message, chatConnectionString);
+
+            const mss = {
+                message_content: message,
+                connection_string: chatConnectionString
+            }
+
+            const result =
+                await axios.post("/Chat/saveMessage",
+                    JSON.stringify(mss),
+                    {
+                        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'Authorization': `Bearer ${authContext.authData?.token}` },
+                        withCredentials: true
+                    }
+                )
 
         } catch (e) {
             console.log(e)
@@ -101,11 +144,11 @@ const ChatContainer = () => {
                 View messages
             </Button>
             {messages.length > 0 ? (
-                <Chat messages={messages} sendMessage={sendMessage} />
+                <Chat messages={messages} chatConnectionString={chatConnectionString} sendMessage={sendMessage} />
             ) : (<>
             </>)}
         </Container>
-        
+
 
     </>)
 }

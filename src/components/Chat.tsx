@@ -4,6 +4,7 @@ import SendMessageForm from "./SendMessageForm";
 
 interface MessageContainerProps {
     messages: MessageData[];
+    chatConnectionString: string;
     sendMessage: any;
 }
 
@@ -13,13 +14,13 @@ type MessageData = {
 };
 
 
-const Chat = ({ messages, sendMessage }: MessageContainerProps) => {
+const Chat = ({ messages, chatConnectionString, sendMessage }: MessageContainerProps) => {
 
 
     return(
         <>
             <MessageContainer messages={messages}/>
-            <SendMessageForm sendMessage={sendMessage}/>
+            <SendMessageForm sendMessage={sendMessage} chatConnectionString={chatConnectionString}/>
         </>
     )
 }
