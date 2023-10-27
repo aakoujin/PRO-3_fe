@@ -1,10 +1,7 @@
-import { ChangeEvent, FormEvent, useRef, useState, useContext } from "react";
-import { Col, Form, Row, Stack } from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useRef, useState, useContext } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { storage } from '../firebase';
-import Button from '@mui/material/Button';
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { v4 } from "uuid";
 import axios from "../api/axios"
 import { AuthContext } from '../context/AuthProvider';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -14,39 +11,66 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
+import Button from '@mui/material/Button';
 import { Paper } from "@mui/material";
-import { CategorySelector } from "./CategorySelector"
-import { TagItem } from "./Listing";
+import { CategorySelector } from "./CategorySelector";
+import { ListingItem, TagItem } from "./Listing";
+import { Form } from "react-bootstrap";
 
-
-export function ListingForm() {
-
-    const authContext = useContext(AuthContext)
+export function EditListing() {
+    const navigate = useNavigate();
+    const authContext = useContext(AuthContext);
     const defaultTheme = createTheme();
 
-    const [images, setImages] = useState<File[] | undefined>();
+    const [images, setImages] = useState<File[] | undefined>([]);
     const [urls, setUrls] = useState<string[]>([]);
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
+    const { id } = useParams();
+    const [id_listing, setIdListing] = useState();
 
-    const titleRef = useRef<HTMLInputElement>(null)
-    const priceRef = useRef<HTMLInputElement>(null)
-    const markdownRef = useRef<HTMLTextAreaElement>(null)
-
+    const titleRef = useRef<HTMLInputElement>(null);
+    const priceRef = useRef<HTMLInputElement>(null);
+    const markdownRef = useRef<HTMLTextAreaElement>(null);
     const countryRef = useRef<HTMLInputElement>(null);
     const stateRef = useRef<HTMLInputElement>(null);
     const cityRef = useRef<HTMLInputElement>(null);
     const ctreetRef = useRef<HTMLInputElement>(null);
     const postalCodeRef = useRef<HTMLInputElement>(null);
 
+    useEffect(() => {
+        // Fetch listing info from the API using the provided id
+        axios.get(`/Listing/${id}`)
+            .then((response) => {
+                const listingData = response.data;
 
-    const navigate = useNavigate();
+                // Set fetched data to the component state
+                setUrls(listingData.contents.map((content: any) => content.media));
+                setSelectedTags(listingData.tags.map((tag: any) => tag.tag_name));
+                setIdListing(listingData.id_listing);
+
+                // Update form fields with fetched data
+                if (titleRef.current) titleRef.current.value = listingData.post_name;
+                if (priceRef.current) priceRef.current.value = listingData.price;
+                if (markdownRef.current) markdownRef.current.value = listingData.post_desc;
+                if (listingData.locations.length > 0) {
+                    if (countryRef.current) countryRef.current.value = listingData.locations[0].country;
+                    if (stateRef.current) stateRef.current.value = listingData.locations[0].state;
+                    if (cityRef.current) cityRef.current.value = listingData.locations[0].city;
+                    if (ctreetRef.current) ctreetRef.current.value = listingData.locations[0].street;
+                    if (postalCodeRef.current) postalCodeRef.current.value = listingData.locations[0].postalCode;
+                }
+
+            })
+            .catch((error) => {
+                console.error('Error fetching data:', error);
+            });
+    }, [id]);
 
     const handleCategoriesSelected = (selectedCategories: string[]) => {
         setSelectedTags(selectedCategories);
-        console.log('Selected categories:', selectedCategories);
     };
 
-    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (e: any) => {
         if (e.target.files) {
             for (let i = 0; i < e.target.files.length; i++) {
                 const newImage = e.target.files[i];
@@ -56,61 +80,62 @@ export function ListingForm() {
     };
 
     const handleUpload = () => {
-        images?.map((image) => {
-            const imageRef = ref(storage, `images/${image!.name + v4()}`)
-            uploadBytes(imageRef, image!).then((snapshot) => {
+        images?.forEach((image) => {
+            const imageRef = ref(storage, `images/${image.name}`);
+            uploadBytes(imageRef, image).then((snapshot) => {
                 getDownloadURL(snapshot.ref).then((url) => {
                     console.log(url);
                     setUrls((prev) => [...prev, url]);
-                })
-            })
+                });
+            });
+        });
+    };
 
-        })
-    }
-
-    async function handleSubmit(e: FormEvent) {
-        e.preventDefault()
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
 
         const contents = urls.map((url) => {
-            return { media: url }
-        })
+            return { media: url };
+        });
 
         const tags = selectedTags.map((t) => {
-            return { tag_name: t }
-        })
+            return { tag_name: t };
+        });
 
-        const locations = [{
-            country: countryRef.current!.value,
-            state: stateRef.current!.value,
-            city: cityRef.current!.value,
-            ctreet: ctreetRef.current!.value,
-            postalCode: postalCodeRef.current!.value,
-        }]
+        const locations = [
+            {
+                country: countryRef.current!.value,
+                state: stateRef.current!.value,
+                city: cityRef.current!.value,
+                ctreet: ctreetRef.current!.value,
+                postalCode: postalCodeRef.current!.value,
+            }
+        ];
 
-        const newListing = {
+        const updatedListing = {
+            id_listing: id_listing,
             post_name: titleRef.current!.value,
             post_desc: markdownRef.current!.value,
-            post_date: "2023-02-07T14:10:05.670Z",//(new Date()).toISOString,
             price: priceRef.current!.value,
             locations,
             contents,
             tags
-        }
+        };
 
-        const result =
-            await axios.post("http://localhost:42999/api/Listing",
-                JSON.stringify(newListing),
-                {
-                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'Authorization': `Bearer ${authContext.authData?.token}` },
-                    withCredentials: true
-                }
-            )
-
-        var createdListing = await result.data
-
-        navigate("/" + createdListing.id_listing); //navigate to listing view page
-    }
-
+        axios.put(`/Listing`, updatedListing, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${authContext.authData?.token}`
+            }
+        })
+            .then((response) => {
+                navigate("/" + id); // Navigate to the listing view page
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    };
+//fix category reset
     return (
         <>
             <ThemeProvider theme={defaultTheme}>
@@ -120,16 +145,12 @@ export function ListingForm() {
                             <Grid container spacing={2}>
                                 <Grid item xs={12} sm={6}>
                                     <CategorySelector onCategoriesSelected={handleCategoriesSelected} />
-
                                 </Grid>
-
                                 <Grid item xs={12} sm={6}>
-                                    {Object.values(selectedTags).map(t => (
-                                        <div key={t}>
-                                            {t}
-                                        </div>))}
+                                    {selectedTags.map((t) => (
+                                        <div key={t}>{t}</div>
+                                    ))}
                                 </Grid>
-
                                 <Grid item xs={12} sm={6}>
                                     <TextField
                                         autoComplete="given-title"
@@ -140,6 +161,7 @@ export function ListingForm() {
                                         label="Title"
                                         autoFocus
                                         inputRef={titleRef}
+                                        InputLabelProps={{ shrink: true }}
                                     />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
@@ -151,13 +173,20 @@ export function ListingForm() {
                                         name="price"
                                         autoComplete="given-price"
                                         inputRef={priceRef}
+                                        InputLabelProps={{ shrink: true }}
                                     />
                                 </Grid>
                                 <Grid item xs={12} md={24}>
-                                    <Form.Group controlId="markdown">
-                                        <Form.Label>Description</Form.Label>
-                                        <Form.Control ref={markdownRef} required as="textarea" rows={5} />
-                                    </Form.Group>
+                                    <TextField
+                                        fullWidth
+                                        id="description"
+                                        label="Description"
+                                        name="description"
+                                        inputRef={markdownRef}
+                                        multiline
+                                        rows={5}
+                                        InputLabelProps={{ shrink: true }}
+                                    />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
                                     <TextField
@@ -168,6 +197,7 @@ export function ListingForm() {
                                         id="country"
                                         label="Country"
                                         inputRef={countryRef}
+                                        InputLabelProps={{ shrink: true }}
                                     />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
@@ -178,6 +208,7 @@ export function ListingForm() {
                                         id="state"
                                         label="State"
                                         inputRef={stateRef}
+                                        InputLabelProps={{ shrink: true }}
                                     />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
@@ -189,6 +220,7 @@ export function ListingForm() {
                                         id="city"
                                         label="City"
                                         inputRef={cityRef}
+                                        InputLabelProps={{ shrink: true }}
                                     />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
@@ -199,6 +231,7 @@ export function ListingForm() {
                                         id="street"
                                         label="Street"
                                         inputRef={ctreetRef}
+                                        InputLabelProps={{ shrink: true }}
                                     />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
@@ -209,6 +242,7 @@ export function ListingForm() {
                                         id="postalCode"
                                         label="Postal Code"
                                         inputRef={postalCodeRef}
+                                        InputLabelProps={{ shrink: true }}
                                     />
                                 </Grid>
                                 <Grid item xs={1}>
@@ -224,12 +258,12 @@ export function ListingForm() {
                                     </Form.Group>
                                     <Grid item xs={12} sm={6}>
                                         <ImageList sx={{ width: 830, height: 150 }} cols={6} rowHeight={124}>
-                                            {urls.map((item) => (
-                                                <ImageListItem key={item}>
+                                            {urls.map((item, index) => (
+                                                <ImageListItem key={index}>
                                                     <img
                                                         src={`${item}?w=124&h=124&fit=crop&auto=format`}
                                                         srcSet={`${item}?w=124&h=124&fit=crop&auto=format&dpr=2 2x`}
-                                                        alt={item}
+                                                        alt={`Image ${index}`}
                                                         loading="lazy"
                                                     />
                                                 </ImageListItem>
@@ -246,15 +280,10 @@ export function ListingForm() {
                             >
                                 Submit
                             </Button>
-                            <Grid container justifyContent="flex-end">
-                                <Grid item>
-                                </Grid>
-                            </Grid>
                         </Box>
-
                     </Container>
                 </Paper>
             </ThemeProvider>
         </>
-    )
+    );
 }

@@ -22,7 +22,7 @@ export default function ModifiableListing(listing: ListingItem) {
     }
     const displayableMedia = listing.contents as any
     const handleEditClick = () => {
-        navigate(`/edit/${listing.id_listing}`);
+        navigate(`/${listing.id_listing}/edit`);
     };
 
     const handleDeleteClick = () => {

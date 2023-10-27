@@ -16,6 +16,7 @@ import EditUserInfoComponent from './components/EditUserInfoComponent';
 import SavedListings from './components/SavedListings';
 import UserChatsComponent from './components/UserChatsComponent';
 import ChatContainer from './components/ChatContainer';
+import { EditListing } from './components/EditListing';
 
 function App() {
   const [listings, setListings] = useState([])
@@ -58,7 +59,7 @@ function App() {
           <Route path="/new" element={<AddListing />}></Route>
           <Route path="/mylistings" element={<PersonalListings/>}></Route>
           <Route path="/:id">
-            <Route path="edit" element={<h1>Edit</h1>}></Route>
+            <Route path="edit" element={<EditListing/>}></Route>
             <Route index element={<FullListing />}></Route>
           </Route>
           <Route path="/userInfo" element={<UserInfoComponent/>} ></Route>
