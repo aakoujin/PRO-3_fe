@@ -17,6 +17,7 @@ import axios from "../api/axios"
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import SimilarListingsContainer from "./SimilarListingsContainer";
 import ContactSeller from "./ContactSeller";
+import LocationInfo from "./LocationInfo";
 
 
 export interface ListingAuthor {
@@ -230,6 +231,9 @@ export function FullListing() {
             <Typography variant="body1">
               Contact: +380 {displayableAuthor.phonenumber}
             </Typography>
+            <>
+              <LocationInfo locations={listing.locations} />
+            </>
           </Grid>
           <Grid item xs={12}>
             {authContext.authData?.token ? (

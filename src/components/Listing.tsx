@@ -18,8 +18,19 @@ export interface ListingItem {
     contents: {
         [key: string]: ContentItem
     };
+    locations: Location[]; 
     tags : TagItem[];
 }
+
+type Location = {
+  id_location: number;
+  id_listing: number;
+  country: string;
+  state: string;
+  city: string;
+  street: string;
+  postalCode: string;
+};
 
 export interface ContentItem {
     id_content: number;

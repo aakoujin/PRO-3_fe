@@ -15,7 +15,7 @@ import TextField from '@mui/material/TextField';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import { Paper } from "@mui/material";
-import {CategorySelector} from "./CategorySelector"
+import { CategorySelector } from "./CategorySelector"
 import { TagItem } from "./Listing";
 
 
@@ -33,13 +33,19 @@ export function ListingForm() {
     const priceRef = useRef<HTMLInputElement>(null)
     const markdownRef = useRef<HTMLTextAreaElement>(null)
 
+    const countryRef = useRef<HTMLInputElement>(null);
+    const stateRef = useRef<HTMLInputElement>(null);
+    const cityRef = useRef<HTMLInputElement>(null);
+    const streetRef = useRef<HTMLInputElement>(null);
+    const postalCodeRef = useRef<HTMLInputElement>(null);
+
 
     const navigate = useNavigate();
 
     const handleCategoriesSelected = (selectedCategories: string[]) => {
         setSelectedTags(selectedCategories);
         console.log('Selected categories:', selectedCategories);
-      };
+    };
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
@@ -71,14 +77,23 @@ export function ListingForm() {
         })
 
         const tags = selectedTags.map((t) => {
-            return {tag_name: t}
+            return { tag_name: t }
         })
+
+        const locations = [{
+            country: countryRef.current!.value,
+            state: stateRef.current!.value,
+            city: cityRef.current!.value,
+            ctreet: streetRef.current!.value,
+            postalCode: postalCodeRef.current!.value,
+        }]
 
         const newListing = {
             post_name: titleRef.current!.value,
             post_desc: markdownRef.current!.value,
             post_date: "2023-02-07T14:10:05.670Z",//(new Date()).toISOString,
             price: priceRef.current!.value,
+            locations,
             contents,
             tags
         }
@@ -105,15 +120,15 @@ export function ListingForm() {
                         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
                             <Grid container spacing={2}>
                                 <Grid item xs={12} sm={6}>
-                                    <CategorySelector onCategoriesSelected={handleCategoriesSelected}/>
+                                    <CategorySelector onCategoriesSelected={handleCategoriesSelected} />
 
                                 </Grid>
 
                                 <Grid item xs={12} sm={6}>
                                     {Object.values(selectedTags).map(t => (
-                                    <div key={t}>
-                                        {t}
-                                    </div>))}
+                                        <div key={t}>
+                                            {t}
+                                        </div>))}
                                 </Grid>
 
                                 <Grid item xs={12} sm={6}>
@@ -144,6 +159,58 @@ export function ListingForm() {
                                         <Form.Label>Description</Form.Label>
                                         <Form.Control ref={markdownRef} required as="textarea" rows={5} />
                                     </Form.Group>
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        autoComplete="given-country"
+                                        name="country"
+                                        required
+                                        fullWidth
+                                        id="country"
+                                        label="Country"
+                                        inputRef={countryRef}
+                                    />
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        autoComplete="given-state"
+                                        name="state"
+                                        fullWidth
+                                        id="state"
+                                        label="State"
+                                        inputRef={stateRef}
+                                    />
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        autoComplete="given-city"
+                                        name="city"
+                                        required
+                                        fullWidth
+                                        id="city"
+                                        label="City"
+                                        inputRef={cityRef}
+                                    />
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        autoComplete="given-street"
+                                        name="street"
+                                        fullWidth
+                                        id="street"
+                                        label="Street"
+                                        inputRef={streetRef}
+                                    />
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        autoComplete="given-postal-code"
+                                        name="postalCode"
+                                        fullWidth
+                                        id="postalCode"
+                                        label="Postal Code"
+                                        inputRef={postalCodeRef}
+                                    />
                                 </Grid>
                                 <Grid item xs={1}>
                                     <Form.Group controlId="files">
