@@ -2,6 +2,9 @@ import { useContext, useEffect, useState } from 'react';
 import axios from '../api/axios';
 import { AuthContext } from '../context/AuthProvider';
 import ListingContainer from './ListingsContainer';
+import { Col, Row } from 'react-bootstrap';
+import Listing from './Listing';
+import ModifiableListing from './ModifiableListing';
 
 
 const P_LISTING_URL = "/Listing/userlistings"
@@ -22,7 +25,7 @@ function PersonalListings() {
     var fetchedListings = Object.values(listings)
 
     const fetchListings = async () => {
-        
+
         const response = await axios.get(P_LISTING_URL,
             {
                 headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'Authorization': `Bearer ${authContext.authData?.token}` },
@@ -36,7 +39,11 @@ function PersonalListings() {
 
     return (
         <>
-            {<ListingContainer {...fetchedListings} />}
+            <Row md={2} xs={1} lg={4} className="g-3">
+                {
+                    Object.values(fetchedListings).map(li => (<Col key={li.id_listing}><ModifiableListing{...li} /></Col>))
+                }
+            </Row>
         </>
     )
 }
