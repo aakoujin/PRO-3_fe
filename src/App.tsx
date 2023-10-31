@@ -17,6 +17,7 @@ import SavedListings from './components/SavedListings';
 import UserChatsComponent from './components/UserChatsComponent';
 import ChatContainer from './components/ChatContainer';
 import { EditListing } from './components/EditListing';
+import { ListingContainerHandler } from './components/ListingContainerHandler';
 
 function App() {
   const [listings, setListings] = useState([])
@@ -55,7 +56,8 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login/>} ></Route>
           <Route path="/register" element={<Register/>} ></Route>
-          <Route path="/" element={<ListingContainer {...fetchedListings} />}></Route>
+          <Route path="/" element={<ListingContainerHandler startingPage={1}/>}></Route>
+          <Route path="/home/:page" element={<ListingContainerHandler startingPage={null}/>}></Route>
           <Route path="/new" element={<AddListing />}></Route>
           <Route path="/mylistings" element={<PersonalListings/>}></Route>
           <Route path="/:id">

@@ -34,7 +34,7 @@ function SavedListings() {
         setLoading(false)
     }
 
-    return (
+   return (
         <>
             {<ListingContainer {...fetchedListings} />}
         </>

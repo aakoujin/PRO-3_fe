@@ -77,10 +77,10 @@ export default function Listing(listing: ListingItem) {
                     {listing.post_name}
                     </Typography>
                     <Typography>
-                    {listing.post_desc}
+                    {listing.price} $
                     </Typography>
                     <Typography>
-                    {listing.price}
+                    Posted: {new Date(listing.post_date).toLocaleDateString()}
                     </Typography>
                   </CardContent>
                 </Card>

@@ -63,7 +63,6 @@ const ContactSeller = ({ username, listing, authorId }: ContactSellerProps) => {
                     headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'Authorization': `Bearer ${authContext.authData?.token}` },
                     withCredentials: true
                 })
-        console.log(result.data)
 
         const transformedMessages: MessageData[] = result.data.map(item => ({
             currentUser: parseInt(item.sender),
