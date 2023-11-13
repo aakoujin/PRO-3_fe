@@ -46,6 +46,9 @@ export function TopNavBar() {
                         <Link component={RouterLink} to="/about" color="inherit" underline="none" style={{ marginLeft: '20px', marginRight: '20px' }}>
                             About
                         </Link>
+                        <Link component={RouterLink} to="/search" color="inherit" underline="none" style={{ marginLeft: '20px', marginRight: '20px' }}>
+                            Search
+                        </Link>
                     </div>
                     <div style={{ marginLeft: 'auto' }}>
                         {authContext.authData?.token ? (

@@ -18,6 +18,8 @@ import UserChatsComponent from './components/UserChatsComponent';
 import ChatContainer from './components/ChatContainer';
 import { EditListing } from './components/EditListing';
 import { ListingContainerHandler } from './components/ListingContainerHandler';
+import Search from './components/Search';
+
 
 function App() {
   const [listings, setListings] = useState([])
@@ -25,8 +27,8 @@ function App() {
 
   useEffect(() => {
     setLoading(true)
-
-    fetchListings();
+    setLoading(false)
+    //fetchListings();
   }, [])
 
   var fetchedListings = Object.values(listings)
@@ -64,6 +66,7 @@ function App() {
             <Route path="edit" element={<EditListing/>}></Route>
             <Route index element={<FullListing />}></Route>
           </Route>
+          <Route path="/search" element={<Search/>}></Route>
           <Route path="/userInfo" element={<UserInfoComponent/>} ></Route>
           <Route path="/editUserInfo" element={<EditUserInfoComponent/>}> </Route>
           <Route path="/savedlistings" element={<SavedListings/>}></Route>
