@@ -90,7 +90,6 @@ export function CategorySelector({ onCategoriesSelected }: CategorySelectorProps
   if (subtags.length == 0) {
     return (
       <Container>
-        <Typography variant="h5">Category Selector</Typography>
         <Button variant="outlined" onClick={handleClickOpen}>
           Select category
         </Button>
@@ -122,8 +121,8 @@ export function CategorySelector({ onCategoriesSelected }: CategorySelectorProps
     );
   } else return (
     <>
+
       <Container>
-        <Typography variant="h5">Category Selector</Typography>
         <Button variant="outlined" onClick={handleClickOpen}>
           Select category
         </Button>

@@ -14,7 +14,7 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
-import { Paper } from "@mui/material";
+import { Avatar, Chip, List, ListItem, ListItemAvatar, ListItemText, Paper, Typography } from "@mui/material";
 import { CategorySelector } from "./CategorySelector"
 import { TagItem } from "./Listing";
 
@@ -108,26 +108,24 @@ export function ListingForm() {
 
         var createdListing = await result.data
 
-        navigate("/" + createdListing.id_listing); //navigate to listing view page
+        navigate("/" + createdListing.id_listing);
     }
 
     return (
         <>
-            <ThemeProvider theme={defaultTheme}>
+            <Container>
                 <Paper elevation={3} style={{ padding: "20px" }}>
                     <Container component="main" maxWidth="lg">
+                    <Typography variant="h5">New Listing</Typography>
                         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
                             <Grid container spacing={2}>
                                 <Grid item xs={12} sm={6}>
                                     <CategorySelector onCategoriesSelected={handleCategoriesSelected} />
 
                                 </Grid>
-
                                 <Grid item xs={12} sm={6}>
                                     {Object.values(selectedTags).map(t => (
-                                        <div key={t}>
-                                            {t}
-                                        </div>))}
+                                        <Chip key={t} style={{ margin: "5px" }} label={t} />))}
                                 </Grid>
 
                                 <Grid item xs={12} sm={6}>
@@ -154,10 +152,17 @@ export function ListingForm() {
                                     />
                                 </Grid>
                                 <Grid item xs={12} md={24}>
-                                    <Form.Group controlId="markdown">
-                                        <Form.Label>Description</Form.Label>
-                                        <Form.Control ref={markdownRef} required as="textarea" rows={5} />
-                                    </Form.Group>
+
+                                    <TextField
+                                        id="markdown"
+                                        label="Description"
+                                        inputRef={markdownRef}
+                                        required
+                                        multiline
+                                        minRows={5}
+                                        variant="outlined"
+                                        sx={{ width: '100%' }}
+                                    />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
                                     <TextField
@@ -213,28 +218,47 @@ export function ListingForm() {
                                 </Grid>
                                 <Grid item xs={1}>
                                     <Form.Group controlId="files">
-                                        <input type="file" multiple onChange={handleChange} />
+                                        <input type="file"
+                                            multiple
+                                            onChange={handleChange}
+                                            style={{ display: 'none' }}
+                                            id="file-upload"
+                                        />
+                                        <label htmlFor="file-upload">
+                                            <Button
+                                                variant="contained"
+                                                component="span"
+                                                onClick={handleUpload}
+
+                                            >
+                                                Select Files
+                                            </Button>
+                                        </label>
                                         <Button
                                             variant="contained"
                                             onClick={handleUpload}
                                             sx={{ mt: 3, mb: 2 }}
+                                            disabled={!images || images.length === 0}
                                         >
                                             Upload
                                         </Button>
                                     </Form.Group>
                                     <Grid item xs={12} sm={6}>
-                                        <ImageList sx={{ width: 830, height: 150 }} cols={6} rowHeight={124}>
-                                            {urls.map((item) => (
-                                                <ImageListItem key={item}>
-                                                    <img
-                                                        src={`${item}?w=124&h=124&fit=crop&auto=format`}
-                                                        srcSet={`${item}?w=124&h=124&fit=crop&auto=format&dpr=2 2x`}
-                                                        alt={item}
-                                                        loading="lazy"
-                                                    />
-                                                </ImageListItem>
+                                        <List>
+                                            {images && images.map((file, index) => (
+                                                <ListItem key={index}>
+                                                    <ListItemAvatar>
+                                                        <Avatar 
+                                                        variant="rounded" 
+                                                        src={URL.createObjectURL(file)}
+                                                        sx={{ width: 160, height: 90 }}
+                                                        >
+                                                        </Avatar>
+                                                    </ListItemAvatar>
+                                                </ListItem>
                                             ))}
-                                        </ImageList>
+                                        </List>
+                                       
                                     </Grid>
                                 </Grid>
                             </Grid>
@@ -254,7 +278,21 @@ export function ListingForm() {
 
                     </Container>
                 </Paper>
-            </ThemeProvider>
+            </Container>
         </>
     )
 }
+
+/*
+ <ImageList sx={{ width: 830, height: 150 }} cols={6} rowHeight={124}>
+                                            {urls.map((item) => (
+                                                <ImageListItem key={item}>
+                                                    <img
+                                                        src={`${item}?w=124&h=124&fit=crop&auto=format`}
+                                                        srcSet={`${item}?w=124&h=124&fit=crop&auto=format&dpr=2 2x`}
+                                                        alt={item}
+                                                        loading="lazy"
+                                                    />
+                                                </ImageListItem>
+                                            ))}
+                                        </ImageList>*/
