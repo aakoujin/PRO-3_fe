@@ -5,6 +5,7 @@ import ListingContainer from './ListingsContainer';
 import { Col, Row } from 'react-bootstrap';
 import Listing from './Listing';
 import ModifiableListing from './ModifiableListing';
+import { Grid } from '@mui/material';
 
 
 const P_LISTING_URL = "/Listing/userlistings"
@@ -38,14 +39,14 @@ function PersonalListings() {
     }
 
     return (
-        <>
-            <Row md={2} xs={1} lg={4} className="g-3">
-                {
-                    Object.values(fetchedListings).map(li => (<Col key={li.id_listing}><ModifiableListing{...li} /></Col>))
-                }
-            </Row>
-        </>
-    )
+        <Grid container spacing={3}>
+          {Object.values(fetchedListings).map(li => (
+            <Grid item key={li.id_listing} xs={12} sm={6} md={4} lg={3}>
+              <Listing {...li} />
+            </Grid>
+          ))}
+        </Grid>
+      );
 }
 
 export default PersonalListings

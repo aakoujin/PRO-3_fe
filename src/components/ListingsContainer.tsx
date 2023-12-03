@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Col, Row } from 'react-bootstrap';
+import { Grid } from '@mui/material';
 import { Content } from './Content';
 import Listing from './Listing';
 
@@ -39,18 +40,15 @@ export interface TagItem{
     tag_name: string;
   }
 
-
-function ListingContainer(fetchedListings: ListingItem[]) {
+  function ListingContainer(fetchedListings: ListingItem[]) {
     return (
-        <>
-            <Row md={2} xs={1} lg={4} className="g-3">
-                {
-                    Object.values(fetchedListings).map(li => (<Col key={li.id_listing}><Listing{...li} /></Col>))
-                }
-            </Row>
-        </>
-    )
-}
-
+      <Grid container spacing={3}>
+        {Object.values(fetchedListings).map(li => (
+          <Grid item key={li.id_listing} xs={12} sm={6} md={4} lg={3}>
+            <Listing {...li} />
+          </Grid>
+        ))}
+      </Grid>
+    );
+  }
 export default ListingContainer
-// Object.entries(fetchedListings).forEach(([key, value])=> {<Listing{...value}/>})

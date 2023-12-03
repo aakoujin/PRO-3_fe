@@ -6,7 +6,8 @@ import {
   Container,
   Paper,
   Grid,
-  IconButton
+  IconButton,
+  Chip
 } from "@mui/material";
 import { ArrowBack, ArrowForward } from "@mui/icons-material";
 import { ListingItem, TagItem } from "./Listing";
@@ -198,9 +199,12 @@ export function FullListing() {
           </Grid>
           <>
             {tags!.map((tagItem) => (
-              <div key={tagItem.id_tag} style={{ border: '1px solid black', padding: '5px', margin: '5px' }}>
-                {tagItem.tag_name}
-              </div>
+              <Chip
+              key={tagItem.id_tag}
+              label={tagItem.tag_name}
+              variant="outlined"
+              style={{ margin: '5px' }}
+            />
             ))}
           </>
           <Grid item xs={12}>
@@ -246,9 +250,7 @@ export function FullListing() {
           </Grid>
           <Grid item xs={12}>
             <Typography variant="body2">
-              <VisibilityIcon
-                style={{ color: 'gray' }} />
-              : {displayableListing.state}
+              <Chip label={displayableListing.state} icon={<VisibilityIcon/>}/>
             </Typography>
           </Grid>
         </Grid>

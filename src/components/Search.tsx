@@ -4,8 +4,11 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { ListingItem } from './Listing';
 import ListingContainer from './ListingsContainer';
-import { Pagination } from '@mui/material';
+import { Container, Pagination, Paper } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import axios from '../api/axios';
+
+
 
 interface SearchParams {
     text_search?: string;
@@ -18,7 +21,8 @@ interface SearchParams {
     page?: string;
 }
 
-const Search: React.FC = () => {
+
+function Search() {
     const navigate = useNavigate();
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
@@ -111,51 +115,53 @@ const Search: React.FC = () => {
     };
 
     return (
-        <div>
-            <TextField
-                label="Text Search"
-                value={searchParams.text_search}
-                onChange={(e) => handleInputChange('text_search', e.target.value)}
-            />
-            <TextField
-                type="number"
-                label="Min Price"
-                value={searchParams.min}
-                onChange={(e) => handleInputChange('min', e.target.value)}
-            />
-            <TextField
-                type="number"
-                label="Max Price"
-                value={searchParams.max}
-                onChange={(e) => handleInputChange('max', e.target.value)}
-            />
-            <TextField
-                label="Country"
-                value={searchParams.country}
-                onChange={(e) => handleInputChange('country', e.target.value)}
-            />
-            <TextField
-                label="City"
-                value={searchParams.city}
-                onChange={(e) => handleInputChange('city', e.target.value)}
-            />
-            <TextField
-                label="State"
-                value={searchParams.state}
-                onChange={(e) => handleInputChange('state', e.target.value)}
-            />
-            <TextField
-                label="Code"
-                value={searchParams.p_code}
-                onChange={(e) => handleInputChange('p_code', e.target.value)}
-            />
-            <Button variant="contained" color="primary" onClick={handleSearch}>
-                Search
-            </Button>
-            <Button variant="contained" color="secondary" onClick={handleClear}>
-                Clear
-            </Button>
-
+        <Container>
+            <Paper>
+                <TextField
+                    label="Text Search"
+                    value={searchParams.text_search}
+                    onChange={(e) => handleInputChange('text_search', e.target.value)}
+                />
+                <TextField
+                    type="number"
+                    label="Min Price"
+                    value={searchParams.min}
+                    onChange={(e) => handleInputChange('min', e.target.value)}
+                />
+                <TextField
+                    type="number"
+                    label="Max Price"
+                    value={searchParams.max}
+                    onChange={(e) => handleInputChange('max', e.target.value)}
+                />
+                <TextField
+                    label="Country"
+                    value={searchParams.country}
+                    onChange={(e) => handleInputChange('country', e.target.value)}
+                />
+                <TextField
+                    label="City"
+                    value={searchParams.city}
+                    onChange={(e) => handleInputChange('city', e.target.value)}
+                />
+                <TextField
+                    label="State"
+                    value={searchParams.state}
+                    onChange={(e) => handleInputChange('state', e.target.value)}
+                />
+                <TextField
+                    label="Code"
+                    value={searchParams.p_code}
+                    onChange={(e) => handleInputChange('p_code', e.target.value)}
+                />
+                <Button variant="contained" color="primary" onClick={handleSearch}>
+                    Search
+                </Button>
+                <Button variant="contained" color="secondary" onClick={handleClear}>
+                    Clear
+                </Button>
+            </Paper>
+            <br></br>
             <>
                 <ListingContainer {...listings} />
                 {totalPages > 1 && (
@@ -169,7 +175,7 @@ const Search: React.FC = () => {
                     </div>
                 )}
             </>
-        </div>
+        </Container>
 
     );
 };

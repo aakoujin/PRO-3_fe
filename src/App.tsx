@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import './App.css';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import AddListing from './components/AddListing';
-import { Container } from 'react-bootstrap';
-import "bootstrap/dist/css/bootstrap.min.css"
+//import { Container } from 'react-bootstrap';
+import { Container, CssBaseline } from '@mui/material'
+//import "bootstrap/dist/css/bootstrap.min.css"
 import ListingContainer from './components/ListingsContainer';
 import { FullListing } from './components/FullListing';
 import { TopNavBar } from './components/TopNavBar';
@@ -19,6 +20,8 @@ import ChatContainer from './components/ChatContainer';
 import { EditListing } from './components/EditListing';
 import { ListingContainerHandler } from './components/ListingContainerHandler';
 import Search from './components/Search';
+import { ThemeOptions, ThemeProvider, createTheme } from '@mui/material/styles';
+//import CssBaseline from "@mui/material/CssBaseline";
 
 
 function App() {
@@ -31,19 +34,27 @@ function App() {
     //fetchListings();
   }, [])
 
-  var fetchedListings = Object.values(listings)
+  const theme = createTheme({
+    palette: {
+      mode: 'dark',
+      primary: {
+        main: '#007bff', 
+      },
+      secondary: {
+        main: '#a9bcfb', 
+      },
+      background: {
+        default: '#1a1a1a', 
+        paper: '#262626',
+      },
+      text: {
+        primary: '#ffffff', 
+        secondary: '#c7c7c7', 
+      },
+      divider: 'rgba(255,255,255,0.12)', 
+    },
+  });
 
-  const fetchListings = async () => {
-    const result =
-      await fetch("http://localhost:42999/api/Listing",
-        {
-          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-          method: 'GET'
-        })
-    const listings = await result.json()
-    setListings(listings)
-    setLoading(false)
-  }
 
   if (loading) return (
     <>
@@ -52,25 +63,27 @@ function App() {
   )
 
   return (
-    <>
-      <TopNavBar/>
+
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <TopNavBar />
       <Container className="mb-4">
         <Routes>
-          <Route path="/login" element={<Login/>} ></Route>
-          <Route path="/register" element={<Register/>} ></Route>
-          <Route path="/" element={<ListingContainerHandler startingPage={1}/>}></Route>
-          <Route path="/home/:page" element={<ListingContainerHandler startingPage={null}/>}></Route>
+          <Route path="/login" element={<Login />} ></Route>
+          <Route path="/register" element={<Register />} ></Route>
+          <Route path="/" element={<ListingContainerHandler startingPage={1} />}></Route>
+          <Route path="/home/:page" element={<ListingContainerHandler startingPage={null} />}></Route>
           <Route path="/new" element={<AddListing />}></Route>
-          <Route path="/mylistings" element={<PersonalListings/>}></Route>
+          <Route path="/mylistings" element={<PersonalListings />}></Route>
           <Route path="/:id">
-            <Route path="edit" element={<EditListing/>}></Route>
+            <Route path="edit" element={<EditListing />}></Route>
             <Route index element={<FullListing />}></Route>
           </Route>
-          <Route path="/search" element={<Search/>}></Route>
-          <Route path="/userInfo" element={<UserInfoComponent/>} ></Route>
-          <Route path="/editUserInfo" element={<EditUserInfoComponent/>}> </Route>
-          <Route path="/savedlistings" element={<SavedListings/>}></Route>
-          <Route path="/chats" element={<UserChatsComponent/>}></Route>
+          <Route path="/search" element={<Search />}></Route>
+          <Route path="/userInfo" element={<UserInfoComponent />} ></Route>
+          <Route path="/editUserInfo" element={<EditUserInfoComponent />}> </Route>
+          <Route path="/savedlistings" element={<SavedListings />}></Route>
+          <Route path="/chats" element={<UserChatsComponent />}></Route>
           <Route path="/chats/:id">
             <Route index element={<ChatContainer />}></Route>
           </Route>
@@ -79,7 +92,7 @@ function App() {
 
         </Routes>
       </Container>
-    </>
+    </ThemeProvider>
   );
 }
 

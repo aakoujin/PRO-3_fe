@@ -3,12 +3,14 @@ import ListingContainer, { ListingItem } from './ListingsContainer';
 import axios from '../api/axios';
 import Pagination from '@mui/material/Pagination';
 import { useNavigate, useParams } from 'react-router-dom';
+import { Container } from '@mui/material';
+import { grey } from '@mui/material/colors';
 
-interface ListingContainerHandlerProps{
-    startingPage : number | null;
+interface ListingContainerHandlerProps {
+  startingPage: number | null;
 }
 
-export function ListingContainerHandler({startingPage} : ListingContainerHandlerProps) {
+export function ListingContainerHandler({ startingPage }: ListingContainerHandlerProps) {
   const [listings, setListings] = useState<ListingItem[]>([]);
   const { page } = useParams();
   const [currentPage, setCurrentPage] = useState(parseInt(page) ? parseInt(page) : 1);
@@ -16,7 +18,7 @@ export function ListingContainerHandler({startingPage} : ListingContainerHandler
   const [totalPages, setTotalPages] = useState(0);
 
   const navigate = useNavigate();
-  
+
   useEffect(() => {
     setLoading(true)
     var targetPage = page ? parseInt(page) : 1
@@ -52,18 +54,19 @@ export function ListingContainerHandler({startingPage} : ListingContainerHandler
     </>
   )
   return (
-    <>
-    <ListingContainer {...listings}/> 
+    <Container>
+      <ListingContainer {...listings} />
       {totalPages > 1 && (
-        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', margin: '20px' }}>
           <Pagination
             count={totalPages}
             page={currentPage}
             color="primary"
             onChange={handlePageChange}
+            variant="outlined" shape="rounded"
           />
         </div>
       )}
-    </>
+    </Container>
   );
 };

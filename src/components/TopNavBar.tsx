@@ -9,8 +9,9 @@ import {
     Button,
     Link,
     Container,
+    Chip,
 } from '@mui/material';
-import { AccountCircle } from '@mui/icons-material';
+import { AccountCircle, Add, Bookmark, Home, List, QuestionMark, Search } from '@mui/icons-material';
 import { AuthContext } from "../context/AuthProvider"
 
 export function TopNavBar() {
@@ -36,32 +37,49 @@ export function TopNavBar() {
     };
 
     return (
-        <AppBar style={{ background: "lightgray", color: "black", marginBottom: '20px' }} position="static">
+        <AppBar position="sticky">
             <Container>
                 <Toolbar style={{ maxWidth: "true" }}>
                     <div>
-                        <Link component={RouterLink} to="/" color="inherit" underline="none" style={{ marginLeft: '20px', marginRight: '20px' }}>
-                            Home
-                        </Link>
-                        <Link component={RouterLink} to="/about" color="inherit" underline="none" style={{ marginLeft: '20px', marginRight: '20px' }}>
-                            About
-                        </Link>
-                        <Link component={RouterLink} to="/search" color="inherit" underline="none" style={{ marginLeft: '20px', marginRight: '20px' }}>
-                            Search
-                        </Link>
+                        <Chip icon={<Home />}
+                            style={{  }}
+                            clickable
+                            component={RouterLink}
+                            to="/"
+                            label="Home" />
+                        <Chip icon={<QuestionMark />}
+                            style={{ marginLeft: '10px' }}
+                            clickable
+                            component={RouterLink}
+                            to="/about"
+                            label="About" />
+                        <Chip icon={<Search />}
+                            style={{ marginLeft: '10px' }}
+                            clickable
+                            component={RouterLink}
+                            to="/search"
+                            label="Search" />
                     </div>
                     <div style={{ marginLeft: 'auto' }}>
                         {authContext.authData?.token ? (
                             <>
-                                <Link component={RouterLink} to="/new" color="inherit" underline="none" style={{ marginLeft: '20px' }}>
-                                    New listing
-                                </Link>
-                                <Link component={RouterLink} to="/mylistings" color="inherit" underline="none" style={{ marginLeft: '20px' }}>
-                                    My listings
-                                </Link>
-                                <Link component={RouterLink} to="/savedlistings" color="inherit" underline="none" style={{ marginLeft: '20px' }}>
-                                    Saved
-                                </Link>
+                                <Chip icon={<Add />}
+                                    style={{ marginLeft: '10px' }}
+                                    clickable component={RouterLink}
+                                    to="/new"
+                                    label="Add Listing" />
+                                <Chip icon={<List />}
+                                    style={{ marginLeft: '10px' }}
+                                    clickable
+                                    component={RouterLink}
+                                    to="/mylistings"
+                                    label="My Listings" />
+                                <Chip icon={<Bookmark />}
+                                    style={{ marginLeft: '10px' }}
+                                    clickable
+                                    component={RouterLink}
+                                    to="/savedlistings"
+                                    label="Saved" />
                             </>
                         ) : (<></>
                         )}
