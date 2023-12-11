@@ -1,5 +1,5 @@
 import { ChangeEvent, FormEvent, useRef, useState, useContext } from "react";
-import { Col, Form, Row, Stack } from "react-bootstrap";
+import { Col, Form, Row } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { storage } from '../firebase';
 import Button from '@mui/material/Button';
@@ -10,13 +10,15 @@ import { AuthContext } from '../context/AuthProvider';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
-import { Avatar, Chip, List, ListItem, ListItemAvatar, ListItemText, Paper, Typography } from "@mui/material";
+import { Avatar, Chip, Paper, Typography, Box, IconButton } from "@mui/material";
 import { CategorySelector } from "./CategorySelector"
 import { TagItem } from "./Listing";
+import { Label, AddAPhoto } from "@mui/icons-material";
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import CancelIcon from '@mui/icons-material/Cancel';
 
 
 export function ListingForm() {
@@ -24,7 +26,7 @@ export function ListingForm() {
     const authContext = useContext(AuthContext)
     const defaultTheme = createTheme();
 
-    const [images, setImages] = useState<File[] | undefined>();
+    const [images, setImages] = useState<File[]>([]);
     const [urls, setUrls] = useState<string[]>([]);
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
@@ -68,12 +70,47 @@ export function ListingForm() {
         })
     }
 
+    const handleAsyncUpload = async () => {
+        images?.map((image) => {
+            const imageRef = ref(storage, `images/${image!.name + v4()}`)
+            uploadBytes(imageRef, image!).then((snapshot) => {
+                getDownloadURL(snapshot.ref).then((url) => {
+                    console.log(url);
+                    setUrls((prev) => [...prev, url]);
+                })
+            })
+
+        })
+      };
+
+
+    const handleDeleteChip = (tagToDelete: string) => () => {
+        const updatedTags = selectedTags.filter(tag => tag !== tagToDelete);
+        handleCategoriesSelected(updatedTags)
+        console.log('updated categories:', updatedTags);
+    };
+
+    const handleClear = () => {
+        setImages([]);
+        setUrls([]);
+    };
+
     async function handleSubmit(e: FormEvent) {
         e.preventDefault()
 
-        const contents = urls.map((url) => {
-            return { media: url }
-        })
+        var contents;
+
+        if (urls.length > 0) {
+            contents = urls.map((url) => {
+                return { media: url }
+            })
+        } else if(urls.length == 0 && images.length > 0){
+            await handleAsyncUpload()
+            contents = urls.map((url) => {
+                return { media: url }
+            })
+        }
+
 
         const tags = selectedTags.map((t) => {
             return { tag_name: t }
@@ -116,16 +153,21 @@ export function ListingForm() {
             <Container>
                 <Paper elevation={3} style={{ padding: "20px" }}>
                     <Container component="main" maxWidth="lg">
-                    <Typography variant="h5">New Listing</Typography>
+                        <Typography variant="h5">New Listing</Typography>
                         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
                             <Grid container spacing={2}>
-                                <Grid item xs={12} sm={6}>
+                                <Grid item xs={12} sm={6}
+                                    sx={{
+                                        marginLeft: 0,
+                                        marginBottom: 2,
+                                    }}
+                                >
                                     <CategorySelector onCategoriesSelected={handleCategoriesSelected} />
 
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
                                     {Object.values(selectedTags).map(t => (
-                                        <Chip key={t} style={{ margin: "5px" }} label={t} />))}
+                                        <Chip key={t} style={{ margin: "5px" }} label={t} onDelete={handleDeleteChip(t)} />))}
                                 </Grid>
 
                                 <Grid item xs={12} sm={6}>
@@ -216,8 +258,35 @@ export function ListingForm() {
                                         inputRef={postalCodeRef}
                                     />
                                 </Grid>
-                                <Grid item xs={1}>
-                                    <Form.Group controlId="files">
+                            </Grid>
+                            <Grid container spacing={1}
+                                sx={{ marginTop: 3 }}>
+                                <Grid item xs={7}>
+                                    <Typography variant="h6">Add content to your listing</Typography>
+                                </Grid>
+                                <Grid item xs={7}>
+                                    {images.length === 0 ? (
+                                        <></>
+                                    ) : (
+                                        <ImageList
+                                            sx={{
+                                                width: 550,
+                                                height: 350,
+                                                border: '1px solid #d3d3d3',
+                                                borderRadius: '3px',
+                                                padding: '10px',
+                                            }} cols={3} rowHeight={164}>
+                                            {images && images.map((file, index) => (
+                                                <ImageListItem key={index}>
+                                                    <Avatar
+                                                        variant="rounded"
+                                                        src={URL.createObjectURL(file)}
+                                                        sx={{ width: 160, height: 90 }}
+                                                    />
+                                                </ImageListItem >
+                                            ))}
+                                        </ImageList>)}
+                                    <Box>
                                         <input type="file"
                                             multiple
                                             onChange={handleChange}
@@ -228,8 +297,9 @@ export function ListingForm() {
                                             <Button
                                                 variant="contained"
                                                 component="span"
+                                                sx={{ mt: 0.5, mb: 2 }}
                                                 onClick={handleUpload}
-
+                                                startIcon={<AddAPhoto />}
                                             >
                                                 Select Files
                                             </Button>
@@ -237,31 +307,29 @@ export function ListingForm() {
                                         <Button
                                             variant="contained"
                                             onClick={handleUpload}
-                                            sx={{ mt: 3, mb: 2 }}
+                                            sx={{ mt: 0.5, mb: 2, ml: 1 }}
                                             disabled={!images || images.length === 0}
+                                            startIcon={<CloudUploadIcon />}
                                         >
                                             Upload
                                         </Button>
-                                    </Form.Group>
-                                    <Grid item xs={12} sm={6}>
-                                        <List>
-                                            {images && images.map((file, index) => (
-                                                <ListItem key={index}>
-                                                    <ListItemAvatar>
-                                                        <Avatar 
-                                                        variant="rounded" 
-                                                        src={URL.createObjectURL(file)}
-                                                        sx={{ width: 160, height: 90 }}
-                                                        >
-                                                        </Avatar>
-                                                    </ListItemAvatar>
-                                                </ListItem>
-                                            ))}
-                                        </List>
-                                       
-                                    </Grid>
+                                        {images.length > 0 && (
+                                            <Button
+                                                variant="contained"
+                                                color="secondary"
+                                                onClick={handleClear}
+                                                sx={{ mt: 0.5, mb: 2, ml: 1 }}
+                                                startIcon={<CancelIcon />} 
+                                            >
+                                                Clear
+                                            </Button>
+                                        )}
+                                    </Box>
                                 </Grid>
+
+
                             </Grid>
+
                             <Button
                                 type="submit"
                                 variant="contained"

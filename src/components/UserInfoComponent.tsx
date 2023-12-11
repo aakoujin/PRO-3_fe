@@ -1,9 +1,9 @@
 import { useContext, useEffect, useState } from 'react';
 import axios from "../api/axios"
 import { useNavigate } from 'react-router-dom';
-import { Paper, Typography, ThemeProvider, createTheme, Button } from '@mui/material';
+import { Paper, Typography, ThemeProvider, createTheme, Button, Container } from '@mui/material';
 import { AuthContext, authData } from "../context/AuthProvider"
-
+import EditIcon from '@mui/icons-material/Edit';
 
 interface UserInfo {
     name: string;
@@ -42,8 +42,8 @@ function UserInfoComponent() {
       };
 
     return (
-        <ThemeProvider theme={defaultTheme}>
-            <Paper elevation={3} style={{ padding: defaultTheme.spacing(3), margin: defaultTheme.spacing(2) }}>
+        <Container>
+            <Paper elevation={3} sx={{ padding: 3, margin: 2 }}>
                 <Typography variant="h5" gutterBottom>
                     User Information
                 </Typography>
@@ -54,7 +54,13 @@ function UserInfoComponent() {
                         </Typography>
                         <Typography variant="body1">Phone: {userInfo.phonenumber}</Typography>
                         <Typography variant="body1">Email: {userInfo.email}</Typography>
-                        <Button onClick={handleModifyClick} variant="contained">
+                        <Button onClick={handleModifyClick} variant="contained"
+                            sx={{
+                                marginTop: 2,
+                                marginBottom: 1
+                            }}
+                            startIcon={<EditIcon/>}
+                        >
                             Modify
                         </Button>
                     </div>
@@ -62,7 +68,7 @@ function UserInfoComponent() {
                     <Typography variant="body1">Loading user information...</Typography>
                 )}
             </Paper>
-        </ThemeProvider>
+        </Container>
     );
 }
 

@@ -41,7 +41,7 @@ function App() {
         main: '#007bff', 
       },
       secondary: {
-        main: '#a9bcfb', 
+        main: '#ac5353', 
       },
       background: {
         default: '#1a1a1a', 

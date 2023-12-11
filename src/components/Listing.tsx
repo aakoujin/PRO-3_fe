@@ -5,6 +5,7 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
+import { BrokenImage } from "@mui/icons-material";
 
 
 export interface ListingItem {
@@ -64,6 +65,7 @@ export default function Listing(listing: ListingItem) {
                   sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
                   onClick={handleClick}
                 >
+                  {displayableMedia && displayableMedia.length > 0 ? (
                   <CardMedia
                     component="div"
                     sx={{
@@ -71,7 +73,9 @@ export default function Listing(listing: ListingItem) {
                       pt: '56.25%',
                     }}
                     image={displayableMedia[0].media}
-                  />
+                  />) : (
+                    <BrokenImage sx={{ pt: '56.25%' }} />
+                  )}
                   <CardContent sx={{ flexGrow: 1 }}>
                     <Typography gutterBottom variant="h5" component="h2">
                     {listing.post_name}

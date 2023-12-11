@@ -42,7 +42,7 @@ function PersonalListings() {
         <Grid container spacing={3}>
           {Object.values(fetchedListings).map(li => (
             <Grid item key={li.id_listing} xs={12} sm={6} md={4} lg={3}>
-              <Listing {...li} />
+              <ModifiableListing {...li} />
             </Grid>
           ))}
         </Grid>

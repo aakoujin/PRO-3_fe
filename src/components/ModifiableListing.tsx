@@ -8,6 +8,8 @@ import Typography from '@mui/material/Typography';
 import { ListingItem } from "./Listing";
 import { Box, Button, Modal } from "@mui/material";
 import axios from "../api/axios";
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 
 export default function ModifiableListing(listing: ListingItem) {
@@ -70,7 +72,7 @@ export default function ModifiableListing(listing: ListingItem) {
                     />
                     <CardContent sx={{ flexGrow: 1 }}>
                         <Typography gutterBottom variant="h5" component="h2">
-                            {listing.post_name}
+                            {listing.post_name.length <= 18 ? listing.post_name : (listing.post_name.substring(0, 18) + "...")}
                         </Typography>
                         <Typography>
                             {listing.price} $
@@ -82,11 +84,15 @@ export default function ModifiableListing(listing: ListingItem) {
                     </CardContent>
                 </Card>
 
-                <Button onClick={handleEditClick}>
+                <Button onClick={handleEditClick} startIcon={<EditIcon />}>
                     Edit
                 </Button>
 
-                <Button onClick={handleDeleteClick}>
+                <Button onClick={handleDeleteClick} startIcon={<DeleteIcon />}
+                    sx={{
+                        color: '#bf4040'
+                    }}
+                >
                     Delete
                 </Button>
                 <Modal open={showDeleteDialog} onClose={handleDeleteCancel}>
@@ -94,19 +100,35 @@ export default function ModifiableListing(listing: ListingItem) {
                         sx={{
                             position: 'absolute',
                             width: 300,
-                            bgcolor: 'white',
+                            bgcolor: '#1a1a1a',
                             p: 3,
                             top: '50%',
                             left: '50%',
                             transform: 'translate(-50%, -50%)',
+                            border: '1px solid #d3d3d3',
+                            borderRadius: '3px',
+                            padding: '10px',
+                            margin: 2
                         }}
                     >
                         <Typography variant="h6">Confirm Deletion</Typography>
                         <Typography variant="body1">Are you sure you want to delete your listing?</Typography>
-                        <Button variant="contained" color="primary" onClick={handleDeleteConfirm}>
+                        <Button variant="contained" color="primary" onClick={handleDeleteConfirm}
+                            sx={{
+                                marginTop: 1,
+                                marginBottom: 1,
+                                marginRight: 1
+                            }}
+                        >
                             Yes
                         </Button>
-                        <Button variant="contained" color="secondary" onClick={handleDeleteCancel}>
+                        <Button variant="contained" color="secondary" onClick={handleDeleteCancel}
+                            sx={{
+                                marginTop: 1,
+                                marginBottom: 1,
+                                marginRight: 1
+                            }}
+                        >
                             No
                         </Button>
                     </Box>

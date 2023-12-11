@@ -9,7 +9,7 @@ import {
   IconButton,
   Chip
 } from "@mui/material";
-import { ArrowBack, ArrowForward } from "@mui/icons-material";
+import { ArrowBack, ArrowForward, BrokenImage } from "@mui/icons-material";
 import { ListingItem, TagItem } from "./Listing";
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
@@ -175,7 +175,7 @@ export function FullListing() {
             <Typography variant="h5">{displayableListing.post_name}</Typography>
           </Grid>
           <Grid item xs={12}>
-            {displayableMedia && displayableMedia.length > 0 && (
+            {displayableMedia && displayableMedia.length > 0 ? (
               <Grid item xs={12}>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
                   <IconButton onClick={goToPreviousPicture}>
@@ -190,6 +190,11 @@ export function FullListing() {
                     <ArrowForward />
                   </IconButton>
                 </div>
+              </Grid>
+            ) : (
+              <Grid item xs={12} sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                <BrokenImage fontSize="large" />
+                <Typography variant="h6">No content</Typography>
               </Grid>
             )}
           </Grid>

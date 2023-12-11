@@ -1,8 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
 import axios from "../api/axios";
-import { TextField, Button, ThemeProvider, createTheme, Paper } from '@mui/material';
+import { TextField, Button, Paper, Container } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from "../context/AuthProvider";
+import CancelIcon from '@mui/icons-material/Cancel';
+import CheckIcon from '@mui/icons-material/Check';
 
 interface UserInfo {
     name: string;
@@ -11,19 +13,6 @@ interface UserInfo {
     email: string;
 }
 
-const defaultTheme = createTheme();
-
-const theme = createTheme({
-    components: {
-        MuiTextField: {
-            styleOverrides: {
-                root: {
-                    width: '100%',
-                },
-            },
-        },
-    },
-});
 
 function EditUserInfoComponent() {
     const authContext = useContext(AuthContext);
@@ -75,16 +64,16 @@ function EditUserInfoComponent() {
     };
 
     return (
-        <ThemeProvider theme={theme}>
-            <Paper elevation={3} style={{ padding: defaultTheme.spacing(3), margin: defaultTheme.spacing(2) }}>
+        <Container>
+            <Paper elevation={3} sx={{ padding: 3, margin: 2 }}>
                 <div style={{
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
-                    gap: defaultTheme.spacing(2),
+                    gap: 2,
                     maxWidth: '400px',
                     margin: '0 auto',
-                    padding: defaultTheme.spacing(3),
+                    padding: 3,
                 }}>
                     {modifiedUserInfo ? (
                         <div>
@@ -93,39 +82,43 @@ function EditUserInfoComponent() {
                                 name="name"
                                 value={modifiedUserInfo.name}
                                 onChange={handleInputChange}
-                                style={{ width: '100%', marginBottom: defaultTheme.spacing(1) }}
+                                sx={{ width: '100%', marginBottom: 1 }}
                             />
                             <TextField
                                 label="Surname"
                                 name="surname"
                                 value={modifiedUserInfo.surname}
                                 onChange={handleInputChange}
-                                style={{ width: '100%', marginBottom: defaultTheme.spacing(1) }}
+                                sx={{ width: '100%', marginBottom: 1 }}
                             />
                             <TextField
                                 label="Phone"
                                 name="phonenumber"
                                 value={modifiedUserInfo.phonenumber}
                                 onChange={handleInputChange}
-                                style={{ width: '100%', marginBottom: defaultTheme.spacing(1) }}
+                                sx={{ width: '100%', marginBottom: 1 }}
                             />
                             <TextField
                                 label="Email"
                                 name="email"
                                 value={modifiedUserInfo.email}
                                 onChange={handleInputChange}
-                                style={{ width: '100%', marginBottom: defaultTheme.spacing(1) }}
+                                sx={{ width: '100%', marginBottom: 1 }}
                             />
                             <div style={{
                                 display: 'flex',
                                 justifyContent: 'space-between',
                                 width: '100%',
-                                marginTop: defaultTheme.spacing(2),
+                                marginTop: 2,
                             }}>
-                                <Button onClick={handleSaveChanges} variant="contained" color="primary">
+                                <Button onClick={handleSaveChanges} variant="contained" color="primary"
+                                startIcon={<CheckIcon/>}
+                                >
                                     Save Changes
                                 </Button>
-                                <Button onClick={handleDiscard} variant="contained" color="secondary">
+                                <Button onClick={handleDiscard} variant="contained" color="secondary"
+                                startIcon={<CancelIcon/>}
+                                >
                                     Discard
                                 </Button>
                             </div>
@@ -135,7 +128,7 @@ function EditUserInfoComponent() {
                     )}
                 </div>
             </Paper>
-        </ThemeProvider>
+        </Container>
     );
 }
 

@@ -82,15 +82,23 @@ export function CategorySelector({ onCategoriesSelected }: CategorySelectorProps
       });
   };
 
+  const handleSelect = () => {
+    onCategoriesSelected(selectedCategory);
+    setOpen(false);
+    setSubtags([]);
+    setFinalTags([]);
+  };
+
   React.useEffect(() => {
     onCategoriesSelected(selectedCategory);
-  }, [selectedCategory, onCategoriesSelected]);
-
+  }, [selectedCategory//, onCategoriesSelected
+  ]);
+  //fixes autoreset of tags
 
   if (subtags.length == 0) {
     return (
       <Container>
-        <Button variant="outlined" onClick={handleClickOpen}>
+        <Button variant="contained" onClick={handleClickOpen}>
           Select category
         </Button>
         <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md">
@@ -112,7 +120,10 @@ export function CategorySelector({ onCategoriesSelected }: CategorySelectorProps
             </Grid>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleClose} color="primary">
+            <Button onClick={handleSelect} color="primary" variant="contained">
+              Select
+            </Button>
+            <Button onClick={handleClose} color="secondary" variant="contained">
               Close
             </Button>
           </DialogActions>
@@ -123,13 +134,13 @@ export function CategorySelector({ onCategoriesSelected }: CategorySelectorProps
     <>
 
       <Container>
-        <Button variant="outlined" onClick={handleClickOpen}>
+        <Button variant="contained" onClick={handleClickOpen}>
           Select category
         </Button>
         <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md">
           <DialogTitle>Select a Category</DialogTitle>
           <DialogContent>
-            <Grid container  rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+            <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
               <Grid item xs={4}>
                 <List>
                   {categories.map((category) => (
@@ -155,18 +166,21 @@ export function CategorySelector({ onCategoriesSelected }: CategorySelectorProps
               <Grid item xs={4}>
                 <List>
                   {Object.values(finaltags).map(ti => (
-                    <ListItem 
-                    onClick={() => handleLastSelect(ti.tag_name)}
-                    style={{ cursor: 'pointer' }}
+                    <ListItem
+                      onClick={() => handleLastSelect(ti.tag_name)}
+                      style={{ cursor: 'pointer' }}
                       key={ti.id_tag}>
-                        {ti.tag_name}
+                      {ti.tag_name}
                     </ListItem>))}
                 </List>
               </Grid>
             </Grid>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleClose} color="primary">
+            <Button onClick={handleSelect} color="primary" variant="contained">
+              Select
+            </Button>
+            <Button onClick={handleClose} color="secondary" variant="contained">
               Close
             </Button>
           </DialogActions>
