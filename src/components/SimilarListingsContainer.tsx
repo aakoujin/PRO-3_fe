@@ -19,7 +19,7 @@ export function SimilarListingsContainer({ similarListings }: SimilarListingsCon
     const [startIndex, setStartIndex] = useState(0);
 
     const navigate = useNavigate();
-    
+
     const nextItem = () => {
         setStartIndex((prevIndex) =>
             prevIndex === similarListings.length - 1 ? 0 : prevIndex + 1
@@ -43,30 +43,30 @@ export function SimilarListingsContainer({ similarListings }: SimilarListingsCon
     const isFirstPage = startIndex === 0;
 
     return (
-        <>
-            <Container>
-                <Grid container justifyContent="space-between" alignItems="center">
-                    <Grid item>
-                        <IconButton onClick={prevItem} disabled={isFirstPage}>
-                            <ArrowBackIcon />
-                        </IconButton>
-                    </Grid>
-                    <Grid item>
-                        <Typography variant="h6">Listings you may find interesting</Typography>
-                    </Grid>
-                    <IconButton onClick={nextItem} disabled={isLastPage}>
-                        <ArrowForwardIcon />
+
+        <Container>
+            <Grid container spacing={2} justifyContent="space-between" alignItems="center">
+                <Grid item>
+                    <IconButton onClick={prevItem} disabled={isFirstPage}>
+                        <ArrowBackIcon />
                     </IconButton>
                 </Grid>
-                <Grid container spacing={2}>
-                    {visibleItems.map((item) => (
-                        <Grid item key={item.id_listing} xs={3}  onClick={() => handleClick(item.id_listing)}>
-                            <Listing{...item} />
-                        </Grid>
-                    ))}
+                <Grid item>
+                    <Typography variant="h6">Listings you may find interesting</Typography>
                 </Grid>
-            </Container>
-        </>
+                <IconButton onClick={nextItem} disabled={isLastPage}>
+                    <ArrowForwardIcon />
+                </IconButton>
+            </Grid>
+            <Grid container spacing={2} marginTop={2} marginBottom={3} >
+                {visibleItems.map((item) => (
+                    <Grid item key={item.id_listing} xs={3} onClick={() => handleClick(item.id_listing)}>
+                        <Listing{...item} />
+                    </Grid>
+                ))}
+            </Grid>
+        </Container>
+
     )
 }
 

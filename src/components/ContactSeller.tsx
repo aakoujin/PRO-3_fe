@@ -4,6 +4,7 @@ import axios from "../api/axios"
 import { AuthContext } from "../context/AuthProvider"
 import { HubConnection, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 import Chat from "./Chat";
+import ChatIcon from '@mui/icons-material/Chat';
 
 interface ContactSellerProps {
     username: string;
@@ -136,15 +137,15 @@ const ContactSeller = ({ username, listing, authorId }: ContactSellerProps) => {
     return (
         <>
             {authorId !== currentUser ? (
-                <Container>
-                    <Button onClick={joinRoom}>
+                <>
+                    <Button onClick={joinRoom} variant="contained" startIcon={<ChatIcon/>}>
                         Contact seller
                     </Button>
                     {messages.length > 0 ? (
                         <Chat messages={messages} chatConnectionString={chatConnectionString} sendMessage={sendMessage} />
                     ) : (<>
                     </>)}
-                </Container>
+                </>
             ) : (
                 <>
                 </>

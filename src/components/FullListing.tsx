@@ -19,7 +19,9 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import SimilarListingsContainer from "./SimilarListingsContainer";
 import ContactSeller from "./ContactSeller";
 import LocationInfo from "./LocationInfo";
-
+import SellIcon from '@mui/icons-material/Sell';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 export interface ListingAuthor {
   name: string;
@@ -169,12 +171,12 @@ export function FullListing() {
 
   return (
     <Container>
-      <Paper elevation={3} style={{ padding: "20px" }}>
-        <Grid container spacing={2} margin={2}>
-          <Grid item xs={12}>
-            <Typography variant="h5">{displayableListing.post_name}</Typography>
-          </Grid>
-          <Grid item xs={12}>
+      <Grid container spacing={2} margin={2} >
+        <Grid item xs={12}>
+          <Typography variant="h5">{displayableListing.post_name}</Typography>
+        </Grid>
+        <Grid item xs={12} marginRight={4}>
+          <Paper elevation={3} sx={{ padding: "20px" }}>
             {displayableMedia && displayableMedia.length > 0 ? (
               <Grid item xs={12}>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -192,77 +194,109 @@ export function FullListing() {
                 </div>
               </Grid>
             ) : (
-              <Grid item xs={12} sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+              <Grid container justifyContent="center" alignItems="center" sx={{ height: '400px' }}>
                 <BrokenImage fontSize="large" />
                 <Typography variant="h6">No content</Typography>
               </Grid>
             )}
-          </Grid>
-
-          <Grid item xs={12} marginTop={2}>
-            <Typography key={displayableListing.price} variant="body1">Price: ${displayableListing.price}</Typography>
-          </Grid>
-          <>
-            {tags!.map((tagItem) => (
-              <Chip
-              key={tagItem.id_tag}
-              label={tagItem.tag_name}
-              variant="outlined"
-              style={{ margin: '5px' }}
-            />
-            ))}
-          </>
-          <Grid item xs={12}>
-            <Typography variant="body1">{displayableListing.post_desc}</Typography>
-          </Grid>
-          <Grid item xs={12}>
-            <Typography variant="body2">
-              Posted: {new Date(displayableListing.post_date).toLocaleDateString()}
-            </Typography>
-          </Grid>
-          <>
-            {authContext.authData?.token ? (
-              <Grid item xs={12}>{isSaved ? (
-                <BookmarkIcon color="primary" onClick={handleRemoveFromBookmarkClick} />
-              ) : (
-                <BookmarkBorderIcon onClick={handleAddToBookmarkClick} />
-              )}</Grid>
-            ) : (<></>)}
-          </>
+          </Paper>
         </Grid>
-        <Grid container spacing={2} margin={2} marginTop={3.5}>
-          <Grid item xs={12}>
-            <Typography variant="body1">
-              Seller: {displayableAuthor.name} {displayableAuthor.surname}
-            </Typography>
-          </Grid>
-          <Grid item xs={12}>
-            <Typography variant="body1">
-              Contact: +380 {displayableAuthor.phonenumber}
-            </Typography>
-            <>
-              <LocationInfo locations={listing.locations} />
-            </>
-          </Grid>
-          <Grid item xs={12}>
-            {authContext.authData?.token ? (
-              <ContactSeller username={author.username} listing={listing.id_listing} authorId={authorId} />
-            ) :
-              (
-                <></>
-              )}
 
-          </Grid>
+        <Grid container spacing={1} marginTop={1} marginRight={4}
+        >
           <Grid item xs={12}>
-            <Typography variant="body2">
-              <Chip label={displayableListing.state} icon={<VisibilityIcon/>}/>
-            </Typography>
+            <Paper elevation={3} sx={{ padding: "20px", marginLeft: 2 }}>
+              <Grid item xs={12} sx={{ marginTop: "5px", marginBottom: "15px" }}>
+                <Chip size="medium" variant="outlined" label={"Asking price: " + displayableListing.price + " $"} icon={<SellIcon />} />
+
+              </Grid>
+              <Grid item xs={12} sx={{ marginTop: "5px", marginBottom: "15px" }}>
+                {tags!.map((tagItem) => (
+                  <Chip
+                    key={tagItem.id_tag}
+                    label={tagItem.tag_name}
+                    variant="outlined"
+                    sx={{ marginRight: 1 }}
+                  />
+                ))}
+              </Grid>
+              <Grid item xs={12} sx={{ marginTop: "20px", marginBottom: "20px" }}>
+                <Typography variant="h6">Description</Typography>
+                <Typography variant="body1"
+                  sx={{
+                    marginTop: 2,
+                    marginBottom: 4
+                  }}
+                >{displayableListing.post_desc}</Typography>
+              </Grid>
+              <Grid item xs={12}>
+
+                <Chip variant="outlined" label={"Posted:" + new Date(displayableListing.post_date).toLocaleDateString()} icon={<CalendarMonthIcon />} ></Chip>
+              </Grid>
+              <Grid item xs={12} sx={{ marginTop: 2, marginBottom: 2 }}>
+                {authContext.authData?.token ? (
+                  <Grid item xs={12}>{isSaved ? (
+                    <BookmarkIcon color="primary" onClick={handleRemoveFromBookmarkClick} />
+                  ) : (
+                    <BookmarkBorderIcon onClick={handleAddToBookmarkClick} />
+                  )}</Grid>
+                ) : (<></>)}
+              </Grid>
+              <Grid item xs={12}>
+                <Chip label={displayableListing.state} icon={<VisibilityIcon />} />
+              </Grid>
+
+            </Paper>
           </Grid>
         </Grid>
-      </Paper>
-      <Paper elevation={3} style={{ padding: "20px", marginTop: "10px" }}>
-        <SimilarListingsContainer similarListings={similar} />
-      </Paper>
+        <Grid container spacing={1} marginTop={1} marginRight={4}>
+          <Grid item xs={12}>
+            <Paper elevation={3} sx={{ padding: "20px", marginLeft: 2 }}>
+              <Grid item xs={12}
+                sx={{
+                  marginBottom: 3
+                }}
+              >
+                <LocationInfo locations={listing.locations} />
+              </Grid>
+              <Grid item xs={12}>
+              <Typography variant="h6">Seller Information {<AccountCircleIcon/>}</Typography>
+                <Typography variant="body1">
+                  Name: {displayableAuthor.name} {displayableAuthor.surname}
+                </Typography>
+              </Grid>
+              <Grid item xs={12}>
+                <Typography variant="body1">
+                  Phone number: +380 {displayableAuthor.phonenumber}
+                </Typography>
+              </Grid>
+              <Grid item xs={12} 
+              sx={{
+                marginTop:2,
+                marginBottom: 2
+              }}
+              >
+                {authContext.authData?.token ? (
+                  <ContactSeller username={author.username} listing={listing.id_listing} authorId={authorId} />
+                ) :
+                  (
+                    <></>
+                  )}
+
+              </Grid>
+
+            </Paper>
+          </Grid>
+        </Grid>
+      </Grid>
+
+      <Grid container marginBottom={10}>
+        <Grid item xs={12} sx={{ marginLeft: 4 }}>
+          <Paper elevation={3} style={{ padding: "20px", }}>
+            <SimilarListingsContainer similarListings={similar} />
+          </Paper>
+        </Grid>
+      </Grid>
     </Container>
   );
 }

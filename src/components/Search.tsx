@@ -4,7 +4,7 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { ListingItem } from './Listing';
 import ListingContainer from './ListingsContainer';
-import { Container, Pagination, Paper } from '@mui/material';
+import { Container, Grid, Pagination, Paper, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import axios from '../api/axios';
 
@@ -116,65 +116,105 @@ function Search() {
 
     return (
         <Container>
-            <Paper>
-                <TextField
-                    label="Text Search"
-                    value={searchParams.text_search}
-                    onChange={(e) => handleInputChange('text_search', e.target.value)}
-                />
-                <TextField
-                    type="number"
-                    label="Min Price"
-                    value={searchParams.min}
-                    onChange={(e) => handleInputChange('min', e.target.value)}
-                />
-                <TextField
-                    type="number"
-                    label="Max Price"
-                    value={searchParams.max}
-                    onChange={(e) => handleInputChange('max', e.target.value)}
-                />
-                <TextField
-                    label="Country"
-                    value={searchParams.country}
-                    onChange={(e) => handleInputChange('country', e.target.value)}
-                />
-                <TextField
-                    label="City"
-                    value={searchParams.city}
-                    onChange={(e) => handleInputChange('city', e.target.value)}
-                />
-                <TextField
-                    label="State"
-                    value={searchParams.state}
-                    onChange={(e) => handleInputChange('state', e.target.value)}
-                />
-                <TextField
-                    label="Code"
-                    value={searchParams.p_code}
-                    onChange={(e) => handleInputChange('p_code', e.target.value)}
-                />
-                <Button variant="contained" color="primary" onClick={handleSearch}>
-                    Search
-                </Button>
-                <Button variant="contained" color="secondary" onClick={handleClear}>
-                    Clear
-                </Button>
-            </Paper>
-            <br></br>
-            <>
-                <ListingContainer {...listings} />
-                {totalPages > 1 && (
-                    <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
-                        <Pagination
-                            count={totalPages}
-                            page={currentPage}
-                            color="primary"
-                            onChange={handlePageChange}
+            <Grid container 
+            sx={{
+                marginBottom: 5,
+                marginTop: 2
+            }}>
+                <Typography variant="h5">Search</Typography>
+                <Grid item xs={12}
+                    
+                >
+                    <Paper sx={{ padding: "15px" }}>
+                        <TextField
+                            sx={{ padding: "5px" }}
+                            label="Text Search"
+                            value={searchParams.text_search}
+                            onChange={(e) => handleInputChange('text_search', e.target.value)}
                         />
-                    </div>
-                )}
-            </>
+                        <TextField
+                            sx={{ padding: "5px" }}
+                            type="number"
+                            label="Min Price"
+                            value={searchParams.min}
+                            onChange={(e) => handleInputChange('min', e.target.value)}
+                        />
+                        <TextField
+                            sx={{ padding: "5px" }}
+                            type="number"
+                            label="Max Price"
+                            value={searchParams.max}
+                            onChange={(e) => handleInputChange('max', e.target.value)}
+                        />
+                        <TextField
+                            sx={{ padding: "5px" }}
+                            label="Country"
+                            value={searchParams.country}
+                            onChange={(e) => handleInputChange('country', e.target.value)}
+                        />
+                        <TextField
+                            sx={{ padding: "5px" }}
+                            label="City"
+                            value={searchParams.city}
+                            onChange={(e) => handleInputChange('city', e.target.value)}
+                        />
+                        <TextField
+                            sx={{ padding: "5px" }}
+                            label="State"
+                            value={searchParams.state}
+                            onChange={(e) => handleInputChange('state', e.target.value)}
+                        />
+                        <TextField
+                            sx={{ padding: "5px" }}
+                            label="Code"
+                            value={searchParams.p_code}
+                            onChange={(e) => handleInputChange('p_code', e.target.value)}
+                        />
+                        <Grid item xs={12}
+                            sx={{
+                                padding: "5px",
+                            }}
+                        >
+                            <Button
+                                sx={{
+                                    marginRight: "10px",
+                                    marginTop: "5px"
+                                }}
+                                variant="contained" color="primary" onClick={handleSearch}>
+                                Search
+                            </Button>
+                            <Button
+                                sx={{
+                                    marginRight: "5px",
+                                    marginTop: "5px"
+                                }}
+                                variant="contained" color="secondary" onClick={handleClear}>
+                                Clear
+                            </Button>
+                        </Grid>
+
+                    </Paper>
+                </Grid>
+
+                <Grid item xs={12}
+                    sx={{
+                        marginTop: 3
+                    }}
+                >
+                    <ListingContainer {...listings} />
+                    {totalPages > 1 && (
+                        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+                            <Pagination
+                                count={totalPages}
+                                page={currentPage}
+                                color="primary"
+                                onChange={handlePageChange}
+                                variant="outlined" shape="rounded"
+                            />
+                        </div>
+                    )}
+                </Grid>
+            </Grid>
         </Container>
 
     );

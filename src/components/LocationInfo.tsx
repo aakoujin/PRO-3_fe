@@ -1,5 +1,6 @@
 import React from 'react';
 import { Typography, Box } from '@mui/material';
+import MapIcon from '@mui/icons-material/Map';
 
 interface Location {
   id_location: number;
@@ -31,18 +32,18 @@ const LocationInfo: React.FC<Props> = ({ locations }) => {
       display="flex" 
       margin={1}
       >
-        <Typography variant="body1">
-            {capitalizeFirstLetter(key)}:
+        <Typography variant="body1" >
+            {capitalizeFirstLetter(key)}
         </Typography>
-        <Typography variant="body1">{value}</Typography>
+        <Typography variant="body1">: { value}</Typography>
       </Box>
     ));
 
   return (
-    <div>
-      <Typography variant="h6">Location Information</Typography>
+    <>
+      <Typography variant="h6">Location Information {<MapIcon/>}</Typography>
       {nonNullFields}
-    </div>
+    </>
   );
 };
 
