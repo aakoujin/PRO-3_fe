@@ -10,6 +10,7 @@ import { Box, Button, Modal } from "@mui/material";
 import axios from "../api/axios";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { BrokenImage } from "@mui/icons-material";
 
 
 export default function ModifiableListing(listing: ListingItem) {
@@ -56,20 +57,27 @@ export default function ModifiableListing(listing: ListingItem) {
     };
 
     return (
-        <div>
+
             <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
                 <Card
                     sx={{ height: '90%', display: 'flex', flexDirection: 'column' }}
                     onClick={handleClick}
                 >
-                    <CardMedia
-                        component="div"
-                        sx={{
-                            // 16:9
-                            pt: '56.25%',
-                        }}
-                        image={displayableMedia[0].media}
-                    />
+                    {displayableMedia && displayableMedia.length > 0 ? (
+                        <CardMedia
+                            component="div"
+                            sx={{
+                                // 16:9
+                                pt: '56.25%',
+                            }}
+                            image={displayableMedia[0].media}
+                        />) : (
+                        <CardMedia sx={{
+                            pt: '50.25%',
+                        }}>
+                            <BrokenImage />
+                        </CardMedia>
+                    )}
                     <CardContent sx={{ flexGrow: 1 }}>
                         <Typography gutterBottom variant="h5" component="h2">
                             {listing.post_name.length <= 18 ? listing.post_name : (listing.post_name.substring(0, 18) + "...")}
@@ -90,6 +98,7 @@ export default function ModifiableListing(listing: ListingItem) {
 
                 <Button onClick={handleDeleteClick} startIcon={<DeleteIcon />}
                     sx={{
+                        background: '#404040',
                         color: '#bf4040'
                     }}
                 >
@@ -134,7 +143,7 @@ export default function ModifiableListing(listing: ListingItem) {
                     </Box>
                 </Modal>
             </Card>
-        </div>
+
     )
 
 }

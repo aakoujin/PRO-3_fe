@@ -12,17 +12,21 @@ import TextField from '@mui/material/TextField';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import Button from '@mui/material/Button';
-import { Paper } from "@mui/material";
+import { Avatar, Chip, Paper, Typography } from "@mui/material";
 import { CategorySelector } from "./CategorySelector";
 import { ListingItem, TagItem } from "./Listing";
 import { Form } from "react-bootstrap";
+import { Label, AddAPhoto } from "@mui/icons-material";
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import CancelIcon from '@mui/icons-material/Cancel';
+import CheckIcon from '@mui/icons-material/Check';
 
 export function EditListing() {
     const navigate = useNavigate();
     const authContext = useContext(AuthContext);
     const defaultTheme = createTheme();
 
-    const [images, setImages] = useState<File[] | undefined>([]);
+    const [images, setImages] = useState<File[]>([]);
     const [urls, setUrls] = useState<string[]>([]);
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
     const { id } = useParams();
@@ -38,17 +42,17 @@ export function EditListing() {
     const postalCodeRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
-        // Fetch listing info from the API using the provided id
+
         axios.get(`/Listing/${id}`)
             .then((response) => {
                 const listingData = response.data;
 
-                // Set fetched data to the component state
+
                 setUrls(listingData.contents.map((content: any) => content.media));
                 setSelectedTags(listingData.tags.map((tag: any) => tag.tag_name));
                 setIdListing(listingData.id_listing);
 
-                // Update form fields with fetched data
+
                 if (titleRef.current) titleRef.current.value = listingData.post_name;
                 if (priceRef.current) priceRef.current.value = listingData.price;
                 if (markdownRef.current) markdownRef.current.value = listingData.post_desc;
@@ -129,28 +133,45 @@ export function EditListing() {
             }
         })
             .then((response) => {
-                navigate("/" + id); // Navigate to the listing view page
+                navigate("/" + id);
             })
             .catch((error) => {
                 console.error('Error:', error);
             });
     };
-//fix category reset
+
+    const handleClear = () => {
+        setImages([]);
+        setUrls([]);
+    };
+    const handleDeleteChip = (tagToDelete: string) => () => {
+        const updatedTags = selectedTags.filter(tag => tag !== tagToDelete);
+        handleCategoriesSelected(updatedTags)
+        console.log('updated categories:', updatedTags);
+    };
+
     return (
         <>
-            <ThemeProvider theme={defaultTheme}>
+            <Container>
                 <Paper elevation={3} style={{ padding: "20px" }}>
                     <Container component="main" maxWidth="lg">
+                        <Typography variant="h5">New Listing</Typography>
                         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
                             <Grid container spacing={2}>
-                                <Grid item xs={12} sm={6}>
+                                <Grid item xs={12} sm={6}
+                                    sx={{
+                                        marginLeft: 0,
+                                        marginBottom: 2,
+                                    }}
+                                >
                                     <CategorySelector onCategoriesSelected={handleCategoriesSelected} />
+
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
-                                    {selectedTags.map((t) => (
-                                        <div key={t}>{t}</div>
-                                    ))}
+                                    {Object.values(selectedTags).map(t => (
+                                        <Chip key={t} style={{ margin: "5px" }} label={t} onDelete={handleDeleteChip(t)} />))}
                                 </Grid>
+
                                 <Grid item xs={12} sm={6}>
                                     <TextField
                                         autoComplete="given-title"
@@ -161,7 +182,6 @@ export function EditListing() {
                                         label="Title"
                                         autoFocus
                                         inputRef={titleRef}
-                                        InputLabelProps={{ shrink: true }}
                                     />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
@@ -173,19 +193,19 @@ export function EditListing() {
                                         name="price"
                                         autoComplete="given-price"
                                         inputRef={priceRef}
-                                        InputLabelProps={{ shrink: true }}
                                     />
                                 </Grid>
                                 <Grid item xs={12} md={24}>
+
                                     <TextField
-                                        fullWidth
-                                        id="description"
+                                        id="markdown"
                                         label="Description"
-                                        name="description"
                                         inputRef={markdownRef}
+                                        required
                                         multiline
-                                        rows={5}
-                                        InputLabelProps={{ shrink: true }}
+                                        minRows={5}
+                                        variant="outlined"
+                                        sx={{ width: '100%' }}
                                     />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
@@ -197,7 +217,6 @@ export function EditListing() {
                                         id="country"
                                         label="Country"
                                         inputRef={countryRef}
-                                        InputLabelProps={{ shrink: true }}
                                     />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
@@ -208,7 +227,6 @@ export function EditListing() {
                                         id="state"
                                         label="State"
                                         inputRef={stateRef}
-                                        InputLabelProps={{ shrink: true }}
                                     />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
@@ -220,7 +238,6 @@ export function EditListing() {
                                         id="city"
                                         label="City"
                                         inputRef={cityRef}
-                                        InputLabelProps={{ shrink: true }}
                                     />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
@@ -231,7 +248,6 @@ export function EditListing() {
                                         id="street"
                                         label="Street"
                                         inputRef={ctreetRef}
-                                        InputLabelProps={{ shrink: true }}
                                     />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
@@ -242,48 +258,124 @@ export function EditListing() {
                                         id="postalCode"
                                         label="Postal Code"
                                         inputRef={postalCodeRef}
-                                        InputLabelProps={{ shrink: true }}
                                     />
                                 </Grid>
-                                <Grid item xs={1}>
-                                    <Form.Group controlId="files">
-                                        <input type="file" multiple onChange={handleChange} />
+                            </Grid>
+                            <Grid container spacing={1}
+                                sx={{ marginTop: 3 }}>
+                                <Grid item xs={7}>
+                                    <Typography variant="h6">Add content to your listing</Typography>
+                                </Grid>
+                                <Grid item xs={7}>
+                                    {images.length === 0 && urls.length > 0 ? (
+                                        <ImageList
+                                            sx={{
+                                                width: 550,
+                                                height: 350,
+                                                border: '1px solid #d3d3d3',
+                                                borderRadius: '3px',
+                                                padding: '10px',
+                                            }} cols={3} rowHeight={164}>
+                                            {urls && urls.map((file, index) => (
+                                                <ImageListItem key={index}>
+                                                    <Avatar
+                                                        variant="rounded"
+                                                        src={file}
+                                                        sx={{ width: 160, height: 90 }}
+                                                    />
+                                                </ImageListItem >
+                                            ))}
+                                        </ImageList>
+                                    ) : (
+                                        <ImageList
+                                            sx={{
+                                                width: 550,
+                                                height: 350,
+                                                border: '1px solid #d3d3d3',
+                                                borderRadius: '3px',
+                                                padding: '10px',
+                                            }} cols={3} rowHeight={164}>
+                                            {images && images.map((file, index) => (
+                                                <ImageListItem key={index}>
+                                                    <Avatar
+                                                        variant="rounded"
+                                                        src={URL.createObjectURL(file)}
+                                                        sx={{ width: 160, height: 90 }}
+                                                    />
+                                                </ImageListItem >
+                                            ))}
+                                        </ImageList>)}
+                                    <Box>
+                                        <input type="file"
+                                            multiple
+                                            onChange={handleChange}
+                                            style={{ display: 'none' }}
+                                            id="file-upload"
+                                        />
+                                        <label htmlFor="file-upload">
+                                            <Button
+                                                variant="contained"
+                                                component="span"
+                                                sx={{ mt: 0.5, mb: 2 }}
+                                                onClick={handleUpload}
+                                                startIcon={<AddAPhoto />}
+                                            >
+                                                Select Files
+                                            </Button>
+                                        </label>
                                         <Button
                                             variant="contained"
                                             onClick={handleUpload}
-                                            sx={{ mt: 3, mb: 2 }}
+                                            sx={{ mt: 0.5, mb: 2, ml: 1 }}
+                                            disabled={!images || images.length === 0}
+                                            startIcon={<CloudUploadIcon />}
                                         >
                                             Upload
                                         </Button>
-                                    </Form.Group>
-                                    <Grid item xs={12} sm={6}>
-                                        <ImageList sx={{ width: 830, height: 150 }} cols={6} rowHeight={124}>
-                                            {urls.map((item, index) => (
-                                                <ImageListItem key={index}>
-                                                    <img
-                                                        src={`${item}?w=124&h=124&fit=crop&auto=format`}
-                                                        srcSet={`${item}?w=124&h=124&fit=crop&auto=format&dpr=2 2x`}
-                                                        alt={`Image ${index}`}
-                                                        loading="lazy"
-                                                    />
-                                                </ImageListItem>
-                                            ))}
-                                        </ImageList>
-                                    </Grid>
+                                        {images.length > 0 && (
+                                            <Button
+                                                variant="contained"
+                                                color="secondary"
+                                                onClick={handleClear}
+                                                sx={{ mt: 0.5, mb: 2, ml: 1 }}
+                                                startIcon={<CancelIcon />}
+                                            >
+                                                Clear
+                                            </Button>
+                                        )}
+                                    </Box>
                                 </Grid>
+
+
                             </Grid>
+
                             <Button
                                 type="submit"
                                 variant="contained"
                                 onClick={handleSubmit}
                                 sx={{ mt: 3, mb: 2 }}
+                                startIcon={<CheckIcon/>}
                             >
                                 Submit
                             </Button>
+                            <Button
+                                variant="contained"
+                                color="secondary"
+                                onClick={() => {navigate("/mylistings")}}
+                                sx={{ mt: 3, mb: 2, ml: 1 }}
+                                startIcon={<CancelIcon/>}
+                            >
+                                Cancel
+                            </Button>
+                            <Grid container justifyContent="flex-end">
+                                <Grid item>
+                                </Grid>
+                            </Grid>
                         </Box>
+
                     </Container>
                 </Paper>
-            </ThemeProvider>
+            </Container>
         </>
     );
 }
