@@ -54,7 +54,7 @@ export function ListingContainerHandler({ startingPage }: ListingContainerHandle
     </>
   )
   return (
-    <Container>
+    <Container sx={{marginTop:3}}>
       <ListingContainer {...listings} />
       {totalPages > 1 && (
         <div style={{ display: 'flex', justifyContent: 'center', margin: '20px' }}>

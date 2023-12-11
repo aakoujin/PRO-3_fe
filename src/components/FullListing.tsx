@@ -172,9 +172,6 @@ export function FullListing() {
   return (
     <Container>
       <Grid container spacing={2} margin={2} >
-        <Grid item xs={12}>
-          <Typography variant="h5">{displayableListing.post_name}</Typography>
-        </Grid>
         <Grid item xs={12} marginRight={4}>
           <Paper elevation={3} sx={{ padding: "20px" }}>
             {displayableMedia && displayableMedia.length > 0 ? (
@@ -206,6 +203,9 @@ export function FullListing() {
         >
           <Grid item xs={12}>
             <Paper elevation={3} sx={{ padding: "20px", marginLeft: 2 }}>
+              <Grid item xs={12} sx={{ marginTop: "5px", marginBottom: "15px" }} >
+                <Typography variant="h5">{displayableListing.post_name}</Typography>
+              </Grid>
               <Grid item xs={12} sx={{ marginTop: "5px", marginBottom: "15px" }}>
                 <Chip size="medium" variant="outlined" label={"Asking price: " + displayableListing.price + " $"} icon={<SellIcon />} />
 
@@ -260,7 +260,7 @@ export function FullListing() {
                 <LocationInfo locations={listing.locations} />
               </Grid>
               <Grid item xs={12}>
-              <Typography variant="h6">Seller Information {<AccountCircleIcon/>}</Typography>
+                <Typography variant="h6">Seller Information {<AccountCircleIcon />}</Typography>
                 <Typography variant="body1">
                   Name: {displayableAuthor.name} {displayableAuthor.surname}
                 </Typography>
@@ -270,11 +270,11 @@ export function FullListing() {
                   Phone number: +380 {displayableAuthor.phonenumber}
                 </Typography>
               </Grid>
-              <Grid item xs={12} 
-              sx={{
-                marginTop:2,
-                marginBottom: 2
-              }}
+              <Grid item xs={12}
+                sx={{
+                  marginTop: 2,
+                  marginBottom: 2
+                }}
               >
                 {authContext.authData?.token ? (
                   <ContactSeller username={author.username} listing={listing.id_listing} authorId={authorId} />
