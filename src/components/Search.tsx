@@ -4,9 +4,11 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { ListingItem } from './Listing';
 import ListingContainer from './ListingsContainer';
-import { Container, Grid, Pagination, Paper, Typography } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
+import { Container, FormControl, Grid, InputLabel, MenuItem, Pagination, Paper, Select, Typography } from '@mui/material';
 import axios from '../api/axios';
+import { IconButton } from '@mui/material';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 
 
 
@@ -19,6 +21,8 @@ interface SearchParams {
     state?: string;
     p_code?: string;
     page?: string;
+    sortBy?: string;
+    sortOrder: string;
 }
 
 
@@ -26,6 +30,9 @@ function Search() {
     const navigate = useNavigate();
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
+
+    const [sortBy, setSortBy] = useState<string>('date');
+    const [sortOrder, setSortOrder] = useState<string>('desc');
 
     const [searchParams, setSearchParams] = useState<SearchParams>({
         text_search: queryParams.get('text_search') || '',
@@ -35,7 +42,9 @@ function Search() {
         city: queryParams.get('city') || '',
         state: queryParams.get('state') || '',
         p_code: queryParams.get('p_code') || '',
-        page: queryParams.get('page') || String(1).valueOf()
+        page: queryParams.get('page') || String(1).valueOf(),
+        sortBy: queryParams.get('sortBy') || '',
+        sortOrder: queryParams.get('sortOrder') || '',
     });
 
     const [listings, setListings] = useState<ListingItem[]>([]);
@@ -49,6 +58,13 @@ function Search() {
 
 
     const handleInputChange = (key: keyof SearchParams, value: string) => {
+        if (key === 'sortBy')
+            setSortBy(value);
+
+        if (key === 'sortOrder')
+            setSortOrder(value);
+
+
         setSearchParams((prevParams) => ({ ...prevParams, [key]: value }));
     };
 
@@ -83,6 +99,8 @@ function Search() {
             city: '',
             state: '',
             p_code: '',
+            sortBy: sortBy,
+            sortOrder: sortOrder,
             page: String(1).valueOf()
         });
     };
@@ -116,14 +134,14 @@ function Search() {
 
     return (
         <Container>
-            <Grid container 
-            sx={{
-                marginBottom: 5,
-                marginTop: 2
-            }}>
+            <Grid container
+                sx={{
+                    marginBottom: 5,
+                    marginTop: 2
+                }}>
                 <Typography variant="h5">Search</Typography>
                 <Grid item xs={12}
-                    
+
                 >
                     <Paper sx={{ padding: "15px" }}>
                         <TextField
@@ -191,6 +209,37 @@ function Search() {
                                 variant="contained" color="secondary" onClick={handleClear}>
                                 Clear
                             </Button>
+                        </Grid>
+                        <Grid item xs={12} sx={{mt: 2, mb: 1}}>
+                            <FormControl sx={{ minWidth: 120, padding: '5px' }}>
+                                <InputLabel id="sort-by-label">Sort By</InputLabel>
+                                <Select
+                                    labelId="sort-by-label"
+                                    id="sort-by"
+                                    value={sortBy}
+                                    label="Sort By"
+                                    onChange={(e) => {
+                                        setSortBy(e.target.value as string);
+                                        handleInputChange('sortBy', e.target.value as string);
+                                    }}
+                                >
+                                    <MenuItem value="date">Date</MenuItem>
+                                    <MenuItem value="name">Name</MenuItem>
+                                    <MenuItem value="price">Price</MenuItem>
+                                    <MenuItem value="country">Country</MenuItem>
+                                    <MenuItem value="city">City</MenuItem>
+                                </Select>
+                            </FormControl>
+                            <IconButton
+                                onClick={() => {
+                                    const newSortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
+                                    setSortOrder(newSortOrder);
+                                    handleInputChange('sortOrder', newSortOrder);
+                                }}
+                            >
+                                {sortOrder === 'desc' ? <ArrowDropDownIcon /> : <ArrowDropUpIcon />}
+                            </IconButton>
+
                         </Grid>
 
                     </Paper>
