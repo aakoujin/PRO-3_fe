@@ -37,6 +37,7 @@ const ChatContainer = () => {
     const [chat, setChat] = useState<ChatRoomProps | null>(null);
     const [currentUser, setCurrectUser] = useState<string | null>();
     const [showChat, setShowChat] = useState(false);
+    const [viewer, setViewer] = useState<number>(null);
 
     const [open, setOpen] = useState(false);
 
@@ -104,7 +105,7 @@ const ChatContainer = () => {
 
             connection.on("ReceiveMessage", (currentUser, message) => {
                 setMessages(messages => [...messages, { currentUser, message }])
-                console.log(messages);
+                //console.log(messages);
             });
 
             await connection.start();
@@ -148,12 +149,27 @@ const ChatContainer = () => {
         joinRoom();
         setShowChat(true);
         setOpen(true);
+        getViewer();
     };
 
     const handleClose = () => {
         setOpen(false);
+        connection.stop();
         navigate("/chats")
     };
+
+    const getViewer = async () => {
+        const result =
+            await axios.get("/User/viewer",
+                {
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'Authorization': `Bearer ${authContext.authData?.token}` },
+                    withCredentials: true
+                }
+            )
+        
+        await setViewer(result.data)
+        console.log(result.data)
+    }
 
     return (<>
 
@@ -185,6 +201,7 @@ const ChatContainer = () => {
                             messages={messages}
                             chatConnectionString={chatConnectionString}
                             sendMessage={sendMessage}
+                            viewer={viewer}
                         />
                     )}
                 </DialogContent>

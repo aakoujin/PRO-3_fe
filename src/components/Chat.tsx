@@ -7,6 +7,7 @@ interface MessageContainerProps {
     messages: MessageData[];
     chatConnectionString: string;
     sendMessage: any;
+    viewer: number;
 }
 
 type MessageData = {
@@ -15,26 +16,16 @@ type MessageData = {
 };
 
 
-const Chat = ({ messages, chatConnectionString, sendMessage }: MessageContainerProps) => {
-    const messagesEndRef = useRef<HTMLDivElement | null>(null);
-
-    const scrollToBottom = () => {
-        if (messagesEndRef.current) {
-            messagesEndRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
-        }
-    };
-
-    useEffect(() => {
-        scrollToBottom();
-    }, [messages]);
+const Chat = ({ messages, chatConnectionString, sendMessage, viewer }: MessageContainerProps) => {
+   
 
 
     return (
         <>
             <Paper elevation={3} sx={{padding:"15px"}}>
-                <MessageContainer messages={messages} />
+                <MessageContainer messages={messages} viewer={viewer} />
                 <SendMessageForm sendMessage={sendMessage} chatConnectionString={chatConnectionString} />
-                <div ref={messagesEndRef}></div>
+                
             </Paper>
         </>
     )

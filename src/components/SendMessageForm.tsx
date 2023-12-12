@@ -41,3 +41,23 @@ const SendMessageForm = ({ sendMessage, chatConnectionString }) => {
 }
 
 export default SendMessageForm;
+
+/*
+<Form
+                onSubmit={e => {
+                    e.preventDefault();
+                    sendMessage(message, chatConnectionString);
+                    setMessage('');
+                }}  
+            >
+                <InputGroup>
+                    <FormControl placeholder="message..."
+                        onChange={e => setMessage(e.target.value)} value={message}
+                    />
+
+                    <Button variant="primary" type="submit" disabled={!message}>
+                        Send
+                    </Button>
+
+                </InputGroup>
+            </Form>*/

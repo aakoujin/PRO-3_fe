@@ -23,12 +23,13 @@ const ContactSeller = ({ username, listing, authorId }: ContactSellerProps) => {
     const [connection, setConnection] = useState<HubConnection | null>();
     const [messages, setMessages] = useState<MessageData[] | null>([]);
     const [open, setOpen] = useState(false);
+    const [viewer, setViewer] = useState<number>(null);
 
     const authContext = useContext(AuthContext);
 
     useEffect(() => {
         fetchConnection();
-      }, []);
+    }, []);
 
     const fetchConnection = async () => {
         const data = {
@@ -82,13 +83,13 @@ const ContactSeller = ({ username, listing, authorId }: ContactSellerProps) => {
             }
 
             const result =
-            await axios.post("/Chat/registerRoom",
-                JSON.stringify(data),
-                {
-                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'Authorization': `Bearer ${authContext.authData?.token}` },
-                    withCredentials: true
-                }
-            )
+                await axios.post("/Chat/registerRoom",
+                    JSON.stringify(data),
+                    {
+                        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'Authorization': `Bearer ${authContext.authData?.token}` },
+                        withCredentials: true
+                    }
+                )
 
             console.log("Registered chatRoom: " + await result.data)
 
@@ -113,35 +114,50 @@ const ContactSeller = ({ username, listing, authorId }: ContactSellerProps) => {
     }
 
     const sendMessage = async (message, chatConnectionString) => {
-        try{
+        try {
             await connection.invoke("SendMessage", message, chatConnectionString);
 
             const mss = {
                 message_content: message,
-                connection_string: chatConnectionString 
+                connection_string: chatConnectionString
             }
 
             const result =
-            await axios.post("/Chat/saveMessage",
-                JSON.stringify(mss),
+                await axios.post("/Chat/saveMessage",
+                    JSON.stringify(mss),
+                    {
+                        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'Authorization': `Bearer ${authContext.authData?.token}` },
+                        withCredentials: true
+                    }
+                )
+
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    const getViewer = async () => {
+        const result =
+            await axios.get("/User/viewer",
                 {
                     headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'Authorization': `Bearer ${authContext.authData?.token}` },
                     withCredentials: true
                 }
             )
-
-        }catch(e){
-            console.log(e)
-        }
+        
+        await setViewer(result.data)
+        console.log(result.data)
     }
 
     const handleContactSeller = () => {
         setOpen(true);
         joinRoom();
+        getViewer();
     };
 
     const handleClose = () => {
         setOpen(false);
+        connection.stop();
     };
 
     return (
@@ -155,7 +171,7 @@ const ContactSeller = ({ username, listing, authorId }: ContactSellerProps) => {
                         <DialogTitle>Contact Seller</DialogTitle>
                         <DialogContent>
                             {messages.length > 0 ? (
-                                <Chat messages={messages} chatConnectionString={chatConnectionString} sendMessage={sendMessage} />
+                                <Chat messages={messages} chatConnectionString={chatConnectionString} sendMessage={sendMessage} viewer={viewer} />
                             ) : (
                                 <>No messages</>
                             )}
