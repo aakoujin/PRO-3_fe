@@ -9,19 +9,19 @@ import { AuthContext } from "../context/AuthProvider"
 import { useNavigate } from 'react-router-dom';
 
 type ChatRoomProps = {
-    id_chat_room: number;
-    first_user: number;
-    second_user: number;
-    listing: number;
-    connection_string: string;
-    chat_room_messages: ChatRoomMessage[];
+  id_chat_room: number;
+  first_user: number;
+  second_user: number;
+  listing: number;
+  connection_string: string;
+  chat_room_messages: ChatRoomMessage[];
 };
 
 type ChatRoomMessage = {
-    id_chat_room_message: number;
-    chat_room_id: number;
-    sender: string;
-    message_content: string;
+  id_chat_room_message: number;
+  chat_room_id: number;
+  sender: string;
+  message_content: string;
 };
 
 
@@ -36,14 +36,14 @@ const UserChatsComponent = () => {
 
   useEffect(() => {
     axios.get('/Chat/getOutcommingChats', {
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'Authorization': `Bearer ${authContext.authData?.token}` },
-        withCredentials: true
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'Authorization': `Bearer ${authContext.authData?.token}` },
+      withCredentials: true
     })
       .then((response) => setBuyChats(response.data));
 
     axios.get('/Chat/getIncommingChats', {
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'Authorization': `Bearer ${authContext.authData?.token}` },
-        withCredentials: true
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'Authorization': `Bearer ${authContext.authData?.token}` },
+      withCredentials: true
     })
       .then((response) => setSellChats(response.data));
   }, []);
@@ -70,7 +70,12 @@ const UserChatsComponent = () => {
       {tabValue === 'Buy' && (
         <div>
           {buyChats.map((item: ChatRoomProps, index: number) => (
-            <Card key={index} onClick={() => handleCardClick(item.id_chat_room)}>
+            <Card
+              sx={{
+                padding: 1,
+                margin: 1
+              }}
+              key={index} onClick={() => handleCardClick(item.id_chat_room)}>
               <CardContent>
                 <Typography variant="body1">
                   To: {item.second_user}
@@ -86,7 +91,12 @@ const UserChatsComponent = () => {
       {tabValue === 'Sell' && (
         <div>
           {sellChats.map((item: ChatRoomProps, index: number) => (
-            <Card key={index} onClick={() => handleCardClick(item.id_chat_room)}>
+            <Card
+              sx={{
+                padding: 1,
+                margin: 1
+              }}
+              key={index} onClick={() => handleCardClick(item.id_chat_room)}>
               <CardContent>
                 <Typography variant="body1">
                   From: {item.first_user}

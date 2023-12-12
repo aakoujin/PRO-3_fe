@@ -15,7 +15,7 @@ const SendMessageForm = ({ sendMessage, chatConnectionString }) => {
                     setMessage('');
                 }}
             >
-                <Grid container spacing={2} alignItems="center">
+                <Grid container spacing={2} mb={2.5} alignItems="center">
                     <Grid item xs={9}>
                         <Input
                             placeholder="Message..."

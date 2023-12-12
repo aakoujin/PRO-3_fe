@@ -3,8 +3,9 @@ import axios from "../api/axios"
 import { AuthContext } from "../context/AuthProvider"
 import { HubConnection, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 import Chat from "./Chat";
-import { useParams } from "react-router-dom";
-import { Button, Container } from "react-bootstrap";
+import { useParams, useNavigate } from "react-router-dom";
+import { Box, Button, Container, Dialog, DialogContent, DialogTitle, Grid } from "@mui/material";
+
 
 type ChatRoomProps = {
     id_chat_room: number;
@@ -35,8 +36,13 @@ const ChatContainer = () => {
     const [messages, setMessages] = useState<MessageData[] | null>([]);
     const [chat, setChat] = useState<ChatRoomProps | null>(null);
     const [currentUser, setCurrectUser] = useState<string | null>();
+    const [showChat, setShowChat] = useState(false);
+
+    const [open, setOpen] = useState(false);
 
     const authContext = useContext(AuthContext);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetchConnection();
@@ -58,7 +64,7 @@ const ChatContainer = () => {
             setCurrectUser(chat.connection_string.split('_')[0]);
             setChatConnectionString(chat.connection_string);
             getHistory(chat.connection_string);
-
+            setOpen(true);
             //joinRoom();
         }
     }, [chat]);
@@ -78,7 +84,7 @@ const ChatContainer = () => {
                     headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'Authorization': `Bearer ${authContext.authData?.token}` },
                     withCredentials: true
                 })
-        console.log(result.data)
+        //console.log(result.data)
 
         const transformedMessages: MessageData[] = result.data.map(item => ({
             currentUser: parseInt(item.sender),
@@ -137,18 +143,54 @@ const ChatContainer = () => {
     }
 
 
+    const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.stopPropagation();
+        joinRoom();
+        setShowChat(true);
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+        navigate("/chats")
+    };
+
     return (<>
 
-        <Container>
-            <Button onClick={joinRoom}>
-                View messages
-            </Button>
-            {messages.length > 0 ? (
-                <Chat messages={messages} chatConnectionString={chatConnectionString} sendMessage={sendMessage} />
-            ) : (<>
-            </>)}
-        </Container>
+        <Container maxWidth="lg" sx={{
+            mb: 5,
+            mt: 2
+        }}>
+            <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
+                <DialogTitle>Contact Seller</DialogTitle>
+                <DialogContent>
 
+                    {!showChat && (
+                        <Box
+                            position="fixed"
+                            top={0}
+                            left={0}
+                            width="100%"
+                            height="100%"
+                            display="flex"
+                            alignItems="center"
+                            justifyContent="center"
+                            bgcolor="rgba(0, 0, 0, 0.5)"
+                        >
+                            <Button variant="contained" onClick={handleButtonClick}>View messages</Button>
+                        </Box>
+                    )}
+                    {showChat && (
+                        <Chat
+                            messages={messages}
+                            chatConnectionString={chatConnectionString}
+                            sendMessage={sendMessage}
+                        />
+                    )}
+                </DialogContent>
+            </Dialog>
+
+        </Container>
 
     </>)
 }

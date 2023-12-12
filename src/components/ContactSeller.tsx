@@ -137,7 +137,7 @@ const ContactSeller = ({ username, listing, authorId }: ContactSellerProps) => {
 
     const handleContactSeller = () => {
         setOpen(true);
-        joinRoom(); // Consider calling joinRoom when the overlay opens
+        joinRoom();
     };
 
     const handleClose = () => {

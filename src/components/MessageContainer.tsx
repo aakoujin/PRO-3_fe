@@ -1,3 +1,5 @@
+import { Paper } from '@mui/material';
+
 
 interface MessageContainerProps {
     messages: MessageData[];
@@ -10,17 +12,17 @@ type MessageData = {
 
 const MessageContainer = ({ messages }: MessageContainerProps) => {
 
-
     return (
         <>
-            <div>
+            
                 {messages.map((m, index) =>
                     <div key={index}>
                         <div>{m.message}</div>
                         <div>{m.currentUser}</div>
                     </div>
                 )}
-            </div>
+                 
+
         </>
     )
 }
