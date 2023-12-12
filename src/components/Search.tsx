@@ -43,8 +43,8 @@ function Search() {
         state: queryParams.get('state') || '',
         p_code: queryParams.get('p_code') || '',
         page: queryParams.get('page') || String(1).valueOf(),
-        sortBy: queryParams.get('sortBy') || '',
-        sortOrder: queryParams.get('sortOrder') || '',
+        sortBy: queryParams.get('sortBy') || "date",
+        sortOrder: queryParams.get('sortOrder') || "desc",
     });
 
     const [listings, setListings] = useState<ListingItem[]>([]);
@@ -99,10 +99,12 @@ function Search() {
             city: '',
             state: '',
             p_code: '',
-            sortBy: sortBy,
-            sortOrder: sortOrder,
+            sortBy: "date",
+            sortOrder: "desc",
             page: String(1).valueOf()
         });
+        setSortBy("date");
+        setSortOrder("desc")
     };
 
     useEffect(() => {
