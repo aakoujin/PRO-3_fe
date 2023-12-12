@@ -97,7 +97,7 @@ export function CategorySelector({ onCategoriesSelected }: CategorySelectorProps
 
   if (subtags.length == 0) {
     return (
-      <Container>
+      <>
         <Button variant="contained" onClick={handleClickOpen}>
           Select category
         </Button>
@@ -128,64 +128,63 @@ export function CategorySelector({ onCategoriesSelected }: CategorySelectorProps
             </Button>
           </DialogActions>
         </Dialog>
-      </Container>
+      </>
     );
   } else return (
     <>
 
-      <Container>
-        <Button variant="contained" onClick={handleClickOpen}>
-          Select category
-        </Button>
-        <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md">
-          <DialogTitle>Select a Category</DialogTitle>
-          <DialogContent>
-            <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-              <Grid item xs={4}>
-                <List>
-                  {categories.map((category) => (
+      <Button variant="contained" onClick={handleClickOpen}>
+        Select category
+      </Button>
+      <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md">
+        <DialogTitle>Select a Category</DialogTitle>
+        <DialogContent>
+          <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+            <Grid item xs={4}>
+              <List>
+                {categories.map((category) => (
 
-                    <ListItem key={category.id}
-                      onClick={() => handleCategoryClick(category.name)}
-                      style={{ cursor: 'pointer' }}>
-                      {category.name}
-                    </ListItem>
-                  ))}
-                </List>
-              </Grid>
-              <Grid item xs={4}>
-                <List>
-                  {Object.values(subtags).map(ti => (
-                    <ListItem key={ti.id_tag}
-                      onClick={() => handleSubCategoryClick(ti.tag_name)}
-                      style={{ cursor: 'pointer' }}>
-                      {ti.tag_name}
-                    </ListItem>))}
-                </List>
-              </Grid>
-              <Grid item xs={4}>
-                <List>
-                  {Object.values(finaltags).map(ti => (
-                    <ListItem
-                      onClick={() => handleLastSelect(ti.tag_name)}
-                      style={{ cursor: 'pointer' }}
-                      key={ti.id_tag}>
-                      {ti.tag_name}
-                    </ListItem>))}
-                </List>
-              </Grid>
+                  <ListItem key={category.id}
+                    onClick={() => handleCategoryClick(category.name)}
+                    style={{ cursor: 'pointer' }}>
+                    {category.name}
+                  </ListItem>
+                ))}
+              </List>
             </Grid>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleSelect} color="primary" variant="contained">
-              Select
-            </Button>
-            <Button onClick={handleClose} color="secondary" variant="contained">
-              Close
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </Container>
+            <Grid item xs={4}>
+              <List>
+                {Object.values(subtags).map(ti => (
+                  <ListItem key={ti.id_tag}
+                    onClick={() => handleSubCategoryClick(ti.tag_name)}
+                    style={{ cursor: 'pointer' }}>
+                    {ti.tag_name}
+                  </ListItem>))}
+              </List>
+            </Grid>
+            <Grid item xs={4}>
+              <List>
+                {Object.values(finaltags).map(ti => (
+                  <ListItem
+                    onClick={() => handleLastSelect(ti.tag_name)}
+                    style={{ cursor: 'pointer' }}
+                    key={ti.id_tag}>
+                    {ti.tag_name}
+                  </ListItem>))}
+              </List>
+            </Grid>
+          </Grid>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleSelect} color="primary" variant="contained">
+            Select
+          </Button>
+          <Button onClick={handleClose} color="secondary" variant="contained">
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
+
     </>
   )
 }

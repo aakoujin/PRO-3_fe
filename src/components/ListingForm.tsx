@@ -1,30 +1,27 @@
 import { ChangeEvent, FormEvent, useRef, useState, useContext } from "react";
-import { Col, Form, Row } from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { storage } from '../firebase';
 import Button from '@mui/material/Button';
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { v4 } from "uuid";
 import axios from "../api/axios"
 import { AuthContext } from '../context/AuthProvider';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
-import { Avatar, Chip, Paper, Typography, Box, IconButton } from "@mui/material";
+import { Avatar, Chip, Paper, Typography, Box } from "@mui/material";
 import { CategorySelector } from "./CategorySelector"
-import { TagItem } from "./Listing";
-import { Label, AddAPhoto } from "@mui/icons-material";
+import { AddAPhoto } from "@mui/icons-material";
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import CancelIcon from '@mui/icons-material/Cancel';
+import CheckIcon from '@mui/icons-material/Check';
 
 
 export function ListingForm() {
 
     const authContext = useContext(AuthContext)
-    const defaultTheme = createTheme();
 
     const [images, setImages] = useState<File[]>([]);
     const [urls, setUrls] = useState<string[]>([]);
@@ -81,7 +78,7 @@ export function ListingForm() {
             })
 
         })
-      };
+    };
 
 
     const handleDeleteChip = (tagToDelete: string) => () => {
@@ -104,7 +101,7 @@ export function ListingForm() {
             contents = urls.map((url) => {
                 return { media: url }
             })
-        } else if(urls.length == 0 && images.length > 0){
+        } else if (urls.length === 0 && images.length > 0) {
             await handleAsyncUpload()
             contents = urls.map((url) => {
                 return { media: url }
@@ -151,201 +148,229 @@ export function ListingForm() {
     return (
         <>
             <Container>
-                <Paper elevation={3} style={{ padding: "20px" }}>
-                    <Container component="main" maxWidth="lg">
-                        <Typography variant="h5">New Listing</Typography>
-                        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
-                            <Grid container spacing={2}>
-                                <Grid item xs={12} sm={6}
-                                    sx={{
-                                        marginLeft: 0,
-                                        marginBottom: 2,
-                                    }}
-                                >
-                                    <CategorySelector onCategoriesSelected={handleCategoriesSelected} />
+                <Typography variant="h5" sx={{
+                    marginLeft: 2,
+                    marginBottom: 2,
+                    marginTop: 2
+                }}>
+                    New Listing</Typography>
+
+                <Container component="main" maxWidth="lg">
+                    <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+                        <Grid container spacing={2}>
+                            <Paper elevation={6} style={{ padding: "20px", width: "100%" }}>
+                                <Grid container maxWidth="lg">
+                                    <Grid item xs={12} sx={{ marginLeft: 0, marginBottom: 2, }}>
+                                        <Typography variant="h6" sx={{
+                                            marginLeft: 0,
+                                            marginBottom: 2,
+                                        }} >Select a category of your listing</Typography>
+                                    </Grid>
+                                    <Grid item xs={6} sx={{ marginLeft: 0, marginBottom: 2, }}>
+                                        <CategorySelector onCategoriesSelected={handleCategoriesSelected} />
+                                    </Grid>
+                                    <Grid item xs={6} >
+                                        {Object.values(selectedTags).map(t => (
+                                            <Chip key={t} style={{ margin: "5px" }} label={t} onDelete={handleDeleteChip(t)} />))}
+                                    </Grid>
 
                                 </Grid>
-                                <Grid item xs={12} sm={6}>
-                                    {Object.values(selectedTags).map(t => (
-                                        <Chip key={t} style={{ margin: "5px" }} label={t} onDelete={handleDeleteChip(t)} />))}
-                                </Grid>
-
-                                <Grid item xs={12} sm={6}>
-                                    <TextField
-                                        autoComplete="given-title"
-                                        name="title"
-                                        required
-                                        fullWidth
-                                        id="title"
-                                        label="Title"
-                                        autoFocus
-                                        inputRef={titleRef}
-                                    />
-                                </Grid>
-                                <Grid item xs={12} sm={6}>
-                                    <TextField
-                                        required
-                                        fullWidth
-                                        id="price"
-                                        label="Price"
-                                        name="price"
-                                        autoComplete="given-price"
-                                        inputRef={priceRef}
-                                    />
-                                </Grid>
-                                <Grid item xs={12} md={24}>
-
-                                    <TextField
-                                        id="markdown"
-                                        label="Description"
-                                        inputRef={markdownRef}
-                                        required
-                                        multiline
-                                        minRows={5}
-                                        variant="outlined"
-                                        sx={{ width: '100%' }}
-                                    />
-                                </Grid>
-                                <Grid item xs={12} sm={6}>
-                                    <TextField
-                                        autoComplete="given-country"
-                                        name="country"
-                                        required
-                                        fullWidth
-                                        id="country"
-                                        label="Country"
-                                        inputRef={countryRef}
-                                    />
-                                </Grid>
-                                <Grid item xs={12} sm={6}>
-                                    <TextField
-                                        autoComplete="given-state"
-                                        name="state"
-                                        fullWidth
-                                        id="state"
-                                        label="State"
-                                        inputRef={stateRef}
-                                    />
-                                </Grid>
-                                <Grid item xs={12} sm={6}>
-                                    <TextField
-                                        autoComplete="given-city"
-                                        name="city"
-                                        required
-                                        fullWidth
-                                        id="city"
-                                        label="City"
-                                        inputRef={cityRef}
-                                    />
-                                </Grid>
-                                <Grid item xs={12} sm={6}>
-                                    <TextField
-                                        autoComplete="given-street"
-                                        name="street"
-                                        fullWidth
-                                        id="street"
-                                        label="Street"
-                                        inputRef={ctreetRef}
-                                    />
-                                </Grid>
-                                <Grid item xs={12} sm={6}>
-                                    <TextField
-                                        autoComplete="given-postal-code"
-                                        name="postalCode"
-                                        fullWidth
-                                        id="postalCode"
-                                        label="Postal Code"
-                                        inputRef={postalCodeRef}
-                                    />
-                                </Grid>
-                            </Grid>
-                            <Grid container spacing={1}
-                                sx={{ marginTop: 3 }}>
-                                <Grid item xs={7}>
-                                    <Typography variant="h6">Add content to your listing</Typography>
-                                </Grid>
-                                <Grid item xs={7}>
-                                    {images.length === 0 ? (
-                                        <></>
-                                    ) : (
-                                        <ImageList
-                                            sx={{
-                                                width: 550,
-                                                height: 350,
-                                                border: '1px solid #d3d3d3',
-                                                borderRadius: '3px',
-                                                padding: '10px',
-                                            }} cols={3} rowHeight={164}>
-                                            {images && images.map((file, index) => (
-                                                <ImageListItem key={index}>
-                                                    <Avatar
-                                                        variant="rounded"
-                                                        src={URL.createObjectURL(file)}
-                                                        sx={{ width: 160, height: 90 }}
-                                                    />
-                                                </ImageListItem >
-                                            ))}
-                                        </ImageList>)}
-                                    <Box>
-                                        <input type="file"
-                                            multiple
-                                            onChange={handleChange}
-                                            style={{ display: 'none' }}
-                                            id="file-upload"
+                            </Paper>
+                            <Paper elevation={6} sx={{ padding: "20px", width: "100%", mt: 3 }}>
+                                <Grid container spacing={1} sx={{ mt: 1 }} >
+                                    <Grid item xs={12} sx={{ mb: 1, }}>
+                                        <Typography variant="h6" >Add information about your item</Typography>
+                                    </Grid>
+                                    <Grid item xs={12} sm={6}>
+                                        <TextField
+                                            autoComplete="given-title"
+                                            name="title"
+                                            required
+                                            fullWidth
+                                            id="title"
+                                            label="Title"
+                                            autoFocus
+                                            inputRef={titleRef}
                                         />
-                                        <label htmlFor="file-upload">
+                                    </Grid>
+                                    <Grid item xs={12} sm={6}>
+                                        <TextField
+                                            required
+                                            fullWidth
+                                            id="price"
+                                            label="Price"
+                                            name="price"
+                                            autoComplete="given-price"
+                                            inputRef={priceRef}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} md={24}>
+
+                                        <TextField
+                                            id="markdown"
+                                            label="Description"
+                                            inputRef={markdownRef}
+                                            required
+                                            multiline
+                                            minRows={5}
+                                            variant="outlined"
+                                            sx={{ width: '100%' }}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} sx={{ mt: 2, mb: 1, }}>
+                                        <Typography variant="h6">Add information about your location</Typography>
+                                    </Grid>
+                                    <Grid item xs={12} sm={6}>
+                                        <TextField
+                                            autoComplete="given-country"
+                                            name="country"
+                                            required
+                                            fullWidth
+                                            id="country"
+                                            label="Country"
+                                            inputRef={countryRef}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} sm={6}>
+                                        <TextField
+                                            autoComplete="given-state"
+                                            name="state"
+                                            fullWidth
+                                            id="state"
+                                            label="State"
+                                            inputRef={stateRef}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} sm={6}>
+                                        <TextField
+                                            autoComplete="given-city"
+                                            name="city"
+                                            required
+                                            fullWidth
+                                            id="city"
+                                            label="City"
+                                            inputRef={cityRef}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} sm={6}>
+                                        <TextField
+                                            autoComplete="given-street"
+                                            name="street"
+                                            fullWidth
+                                            id="street"
+                                            label="Street"
+                                            inputRef={ctreetRef}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} sm={6}>
+                                        <TextField
+                                            autoComplete="given-postal-code"
+                                            name="postalCode"
+                                            fullWidth
+                                            id="postalCode"
+                                            label="Postal Code"
+                                            inputRef={postalCodeRef}
+                                        />
+                                    </Grid>
+                                </Grid>
+                            </Paper>
+
+                            <Paper elevation={6} sx={{ padding: "20px", width: "100%", ml: 0, mt: 3 }}>
+                                <Grid container
+                                    sx={{ marginLeft: 0 }}>
+                                    <Grid item xs={12} sx={{ mb: 2 }}>
+                                        <Typography variant="h6">Add content to your listing</Typography>
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        {images.length === 0 ? (
+                                            <></>
+                                        ) : (
+                                            <ImageList
+                                                sx={{
+                                                    width: 550,
+                                                    height: 350,
+                                                    border: '1px solid #d3d3d3',
+                                                    borderRadius: '3px',
+                                                    padding: '10px',
+                                                }} cols={3} rowHeight={164}>
+                                                {images && images.map((file, index) => (
+                                                    <ImageListItem key={index}>
+                                                        <Avatar
+                                                            variant="rounded"
+                                                            src={URL.createObjectURL(file)}
+                                                            sx={{ width: 160, height: 90 }}
+                                                        />
+                                                    </ImageListItem >
+                                                ))}
+                                            </ImageList>)}
+                                        <Box>
+                                            <input type="file"
+                                                multiple
+                                                onChange={handleChange}
+                                                style={{ display: 'none' }}
+                                                id="file-upload"
+                                            />
+                                            <label htmlFor="file-upload">
+                                                <Button
+                                                    variant="contained"
+                                                    component="span"
+                                                    sx={{ mt: 0.5, mb: 2 }}
+                                                    onClick={handleUpload}
+                                                    startIcon={<AddAPhoto />}
+                                                >
+                                                    Select Files
+                                                </Button>
+                                            </label>
                                             <Button
                                                 variant="contained"
-                                                component="span"
-                                                sx={{ mt: 0.5, mb: 2 }}
                                                 onClick={handleUpload}
-                                                startIcon={<AddAPhoto />}
-                                            >
-                                                Select Files
-                                            </Button>
-                                        </label>
-                                        <Button
-                                            variant="contained"
-                                            onClick={handleUpload}
-                                            sx={{ mt: 0.5, mb: 2, ml: 1 }}
-                                            disabled={!images || images.length === 0}
-                                            startIcon={<CloudUploadIcon />}
-                                        >
-                                            Upload
-                                        </Button>
-                                        {images.length > 0 && (
-                                            <Button
-                                                variant="contained"
-                                                color="secondary"
-                                                onClick={handleClear}
                                                 sx={{ mt: 0.5, mb: 2, ml: 1 }}
-                                                startIcon={<CancelIcon />} 
+                                                disabled={!images || images.length === 0}
+                                                startIcon={<CloudUploadIcon />}
                                             >
-                                                Clear
+                                                Upload
                                             </Button>
-                                        )}
-                                    </Box>
+                                            {images.length > 0 && (
+                                                <Button
+                                                    variant="contained"
+                                                    color="secondary"
+                                                    onClick={handleClear}
+                                                    sx={{ mt: 0.5, mb: 2, ml: 1 }}
+                                                    startIcon={<CancelIcon />}
+                                                >
+                                                    Clear
+                                                </Button>
+                                            )}
+                                        </Box>
+                                    </Grid>
                                 </Grid>
-
-
+                            </Paper>
+                            <Grid container sx={{ mb: 10 }}>
+                                <Button
+                                    type="submit"
+                                    variant="contained"
+                                    onClick={handleSubmit}
+                                    sx={{ mt: 3, mb: 2 }}
+                                    startIcon={<CheckIcon />}
+                                >
+                                    Submit
+                                </Button>
+                                <Button
+                                    variant="contained"
+                                    color="secondary"
+                                    onClick={() => { navigate("/mylistings") }}
+                                    sx={{ mt: 3, mb: 2, ml: 1 }}
+                                    startIcon={<CancelIcon />}
+                                >
+                                    Cancel
+                                </Button>
                             </Grid>
 
-                            <Button
-                                type="submit"
-                                variant="contained"
-                                onClick={handleSubmit}
-                                sx={{ mt: 3, mb: 2 }}
-                            >
-                                Submit
-                            </Button>
-                            <Grid container justifyContent="flex-end">
-                                <Grid item>
-                                </Grid>
-                            </Grid>
-                        </Box>
+                        </Grid>
+                    </Box>
 
-                    </Container>
-                </Paper>
+                </Container>
+
             </Container>
         </>
     )

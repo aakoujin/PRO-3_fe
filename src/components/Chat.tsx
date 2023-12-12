@@ -5,7 +5,7 @@ import SendMessageForm from "./SendMessageForm";
 interface MessageContainerProps {
     messages: MessageData[];
     chatConnectionString: string;
-    sendMessage: any;
+    sendMessage: any;   
 }
 
 type MessageData = {

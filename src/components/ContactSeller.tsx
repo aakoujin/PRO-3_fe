@@ -1,4 +1,4 @@
-import { Button, Container } from "@mui/material";
+import { Button, Container, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import axios from "../api/axios"
 import { AuthContext } from "../context/AuthProvider"
@@ -22,6 +22,7 @@ const ContactSeller = ({ username, listing, authorId }: ContactSellerProps) => {
     const [currentUser, setCurrectUser] = useState<number | null>();
     const [connection, setConnection] = useState<HubConnection | null>();
     const [messages, setMessages] = useState<MessageData[] | null>([]);
+    const [open, setOpen] = useState(false);
 
     const authContext = useContext(AuthContext);
 
@@ -134,20 +135,35 @@ const ContactSeller = ({ username, listing, authorId }: ContactSellerProps) => {
         }
     }
 
+    const handleContactSeller = () => {
+        setOpen(true);
+        joinRoom(); // Consider calling joinRoom when the overlay opens
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
     return (
         <>
-            {authorId !== currentUser ? (
+            {authorId !== currentUser && (
                 <>
-                    <Button onClick={joinRoom} variant="contained" startIcon={<ChatIcon/>}>
+                    <Button onClick={handleContactSeller} variant="contained" startIcon={<ChatIcon />}>
                         Contact seller
                     </Button>
-                    {messages.length > 0 ? (
-                        <Chat messages={messages} chatConnectionString={chatConnectionString} sendMessage={sendMessage} />
-                    ) : (<>
-                    </>)}
-                </>
-            ) : (
-                <>
+                    <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
+                        <DialogTitle>Contact Seller</DialogTitle>
+                        <DialogContent>
+                            {messages.length > 0 ? (
+                                <Chat messages={messages} chatConnectionString={chatConnectionString} sendMessage={sendMessage} />
+                            ) : (
+                                <>No messages</>
+                            )}
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={handleClose}>Close</Button>
+                        </DialogActions>
+                    </Dialog>
                 </>
             )}
 

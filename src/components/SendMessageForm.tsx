@@ -1,5 +1,6 @@
+import { Grid, Input, Button } from "@mui/material";
 import { useState } from "react";
-import { Button, Form, FormControl, InputGroup } from "react-bootstrap";
+import { Form } from "react-bootstrap";
 
 
 const SendMessageForm = ({ sendMessage, chatConnectionString }) => {
@@ -12,18 +13,28 @@ const SendMessageForm = ({ sendMessage, chatConnectionString }) => {
                     e.preventDefault();
                     sendMessage(message, chatConnectionString);
                     setMessage('');
-                }}  
+                }}
             >
-                <InputGroup>
-                    <FormControl placeholder="message..."
-                        onChange={e => setMessage(e.target.value)} value={message}
-                    />
-
-                    <Button variant="primary" type="submit" disabled={!message}>
-                        Send
-                    </Button>
-
-                </InputGroup>
+                <Grid container spacing={2} alignItems="center">
+                    <Grid item xs={9}>
+                        <Input
+                            placeholder="Message..."
+                            value={message}
+                            onChange={(e) => setMessage(e.target.value)}
+                            fullWidth
+                        />
+                    </Grid>
+                    <Grid item xs={3}>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            type="submit"
+                            disabled={!message}
+                        >
+                            Send
+                        </Button>
+                    </Grid>
+                </Grid>
             </Form>
         </>
     )
