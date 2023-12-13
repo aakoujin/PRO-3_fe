@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import axios from '../api/axios';
 import { AuthContext } from '../context/AuthProvider';
 import ListingContainer from './ListingsContainer';
+import { Grid } from '@mui/material';
 
 
 const P_LISTING_URL = "/SavedListing/savedlistings"
@@ -22,7 +23,7 @@ function SavedListings() {
     var fetchedListings = Object.values(listings)
 
     const fetchListings = async () => {
-        
+
         const response = await axios.get(P_LISTING_URL,
             {
                 headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'Authorization': `Bearer ${authContext.authData?.token}` },
@@ -34,10 +35,10 @@ function SavedListings() {
         setLoading(false)
     }
 
-   return (
-        <>
+    return (
+        <Grid container spacing={3} marginBottom={10} marginTop={2}>
             {<ListingContainer {...fetchedListings} />}
-        </>
+        </Grid>
     )
 }
 

@@ -144,7 +144,7 @@ const ContactSeller = ({ username, listing, authorId }: ContactSellerProps) => {
                     withCredentials: true
                 }
             )
-        
+
         await setViewer(result.data)
         console.log(result.data)
     }
@@ -173,7 +173,10 @@ const ContactSeller = ({ username, listing, authorId }: ContactSellerProps) => {
                             {messages.length > 0 ? (
                                 <Chat messages={messages} chatConnectionString={chatConnectionString} sendMessage={sendMessage} viewer={viewer} />
                             ) : (
-                                <>No messages</>
+                                <>
+                                    <>No messages</>
+                                    <Chat messages={messages} chatConnectionString={chatConnectionString} sendMessage={sendMessage} viewer={viewer} />
+                                </>
                             )}
                         </DialogContent>
                         <DialogActions>

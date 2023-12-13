@@ -21,6 +21,7 @@ import { EditListing } from './components/EditListing';
 import { ListingContainerHandler } from './components/ListingContainerHandler';
 import Search from './components/Search';
 import { ThemeOptions, ThemeProvider, createTheme } from '@mui/material/styles';
+import FooterComponent from './components/FooterComponent';
 //import CssBaseline from "@mui/material/CssBaseline";
 
 
@@ -71,8 +72,8 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login />} ></Route>
           <Route path="/register" element={<Register />} ></Route>
-          <Route path="/" element={<ListingContainerHandler startingPage={1} />}></Route>
-          <Route path="/home/:page" element={<ListingContainerHandler startingPage={null} />}></Route>
+          <Route path="/" element={<><ListingContainerHandler startingPage={1} /> <FooterComponent/> </>}></Route>
+          <Route path="/home/:page" element={<><ListingContainerHandler startingPage={null} /> <FooterComponent/> </>}></Route>
           <Route path="/new" element={<AddListing />}></Route>
           <Route path="/mylistings" element={<PersonalListings />}></Route>
           <Route path="/:id">

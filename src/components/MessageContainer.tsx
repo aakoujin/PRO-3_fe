@@ -25,7 +25,7 @@ const MessageContainer = ({ messages, viewer }: MessageContainerProps) => {
         scrollToBottom();
     }, [messages]);
 
-    console.log(messages)
+    //console.log(messages)
     return (
 
         <div style={{ overflowY: 'auto', maxHeight: '400px', marginRight: 1 }}>

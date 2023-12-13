@@ -7,6 +7,9 @@ import Typography from '@mui/material/Typography';
 import axios from "../api/axios"
 import { AuthContext } from "../context/AuthProvider"
 import { useNavigate } from 'react-router-dom';
+import { CardMedia, Chip, Grid } from '@mui/material';
+import { BrokenImage } from '@mui/icons-material';
+import SellIcon from '@mui/icons-material/Sell';
 
 type ChatRoomProps = {
   id_chat_room: number;
@@ -14,6 +17,9 @@ type ChatRoomProps = {
   second_user: number;
   listing: number;
   connection_string: string;
+  media: string;
+  price: number;
+  name: string;
   chat_room_messages: ChatRoomMessage[];
 };
 
@@ -57,6 +63,7 @@ const UserChatsComponent = () => {
     navigate(`/chats/${id_chat_room}`);
   };
 
+
   return (
     <div>
       <Tabs
@@ -77,39 +84,102 @@ const UserChatsComponent = () => {
               }}
               key={index} onClick={() => handleCardClick(item.id_chat_room)}>
               <CardContent>
-                <Typography variant="body1">
-                  To: {item.second_user}
-                </Typography>
-                <Typography variant="body1">
-                  For: {item.listing}
-                </Typography>
-              </CardContent>
+                <Grid container>
+                  <Grid item xs={4}>
+                    {item.media && item.media.length > 0 ? (
+                      <CardMedia
+                        component="div"
+                        sx={{
+                          // 16:9
+                          //pt: '56.25%',
+                          height: 160,
+                          width: 250,
+                          objectFit: "contain"
+                        }}
+                        image={item.media}
+                      />) : (
+                      <CardMedia sx={{
+                        // 16:9
+                        //pt: '56.25%',
+                        height: 160,
+                        width: 250,
+                        objectFit: "contain"
+                      }}>
+                        <BrokenImage />
+                      </CardMedia>
+                    )}
+                  </Grid>
+                  <Grid item xs={8}>
+                    <Typography variant="body1">
+                      Resume your conversation for:
+                    </Typography>
+                    <Typography sx={{ mt: 1, mb: 5 }} variant="body1">
+                      {item.name}
+                    </Typography>
+                  <Chip size="medium" variant="outlined" label={"Asking price: " + item.price + " $"} icon={<SellIcon />} />
+                </Grid>
+
+              </Grid>
+            </CardContent>
             </Card>
-          ))}
-        </div>
-      )}
-      {tabValue === 'Sell' && (
-        <div>
-          {sellChats.map((item: ChatRoomProps, index: number) => (
-            <Card
-              sx={{
-                padding: 1,
-                margin: 1
-              }}
-              key={index} onClick={() => handleCardClick(item.id_chat_room)}>
-              <CardContent>
-                <Typography variant="body1">
-                  From: {item.first_user}
-                </Typography>
-                <Typography variant="body1">
-                  For: {item.listing}
-                </Typography>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      )}
+      ))}
     </div>
+  )
+}
+{
+  tabValue === 'Sell' && (
+    <div>
+      {sellChats.map((item: ChatRoomProps, index: number) => (
+        <Card
+          sx={{
+            padding: 1,
+            margin: 1
+          }}
+          key={index} onClick={() => handleCardClick(item.id_chat_room)}>
+          <CardContent>
+            <Grid container>
+              <Grid item xs={4}>
+                {item.media && item.media.length > 0 ? (
+                  <CardMedia
+                    component="div"
+                    sx={{
+                      // 16:9
+                      //pt: '56.25%',
+                      height: 160,
+                      width: 250,
+                      objectFit: "contain"
+                    }}
+                    image={item.media}
+                  />) : (
+                  <CardMedia sx={{
+                    // 16:9
+                    //pt: '56.25%',
+                    height: 160,
+                    width: 250,
+                    objectFit: "contain"
+                  }}>
+                    <BrokenImage />
+                  </CardMedia>
+                )}
+              </Grid>
+              <Grid item xs={8}>
+                <Typography variant="body1">
+                  Resume your conversation for:
+                </Typography>
+                <Typography sx={{ mt: 1, mb: 5 }} variant="body1">
+                  {item.name}
+                </Typography>
+                <Chip size="medium" variant="outlined" label={"Asking price: " + item.price + " $"} icon={<SellIcon />} />
+              </Grid>
+
+            </Grid>
+          </CardContent>
+        </Card>
+      ))}
+    </div>
+  )
+}
+    </div >
   );
 };
 
