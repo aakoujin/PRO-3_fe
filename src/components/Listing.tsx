@@ -82,7 +82,7 @@ export default function Listing(listing: ListingItem) {
         )}
         <CardContent sx={{ flexGrow: 1 }}>
           <Typography gutterBottom variant="h5" component="h2">
-            {listing.post_name}
+            {listing.post_name.length <= 18 ? listing.post_name : (listing.post_name.substring(0, 18) + "...")}
           </Typography>
           <Typography>
             {listing.price} $

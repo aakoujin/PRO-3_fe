@@ -11,11 +11,15 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { useNavigate } from "react-router-dom";
 
 function Register() {
+    const navigate = useNavigate();
 
     const name = useRef<HTMLInputElement>(null)
     const surname = useRef<HTMLInputElement>(null)
+    const email = useRef<HTMLInputElement>(null)
+    const phone = useRef<HTMLInputElement>(null)
     const userLogin = useRef<HTMLInputElement>(null)
     const userPassword = useRef<HTMLInputElement>(null)
     const defaultTheme = createTheme();
@@ -29,6 +33,8 @@ function Register() {
         const newUser = {
             name: name.current!.value,
             surname: surname.current!.value,
+            email: email.current!.value,
+            phonenumber: surname.current!.value,
             userLogin: userLogin.current!.value,
             userPassword: userPassword.current!.value
         }
@@ -44,6 +50,7 @@ function Register() {
 
         var createdUser = await result.json()
         console.log(createdUser)
+        navigate("/login");
 
 
     }
@@ -95,6 +102,28 @@ function Register() {
                                     <TextField
                                         required
                                         fullWidth
+                                        id="email"
+                                        label="Email"
+                                        name="email"
+                                        autoComplete="email"
+                                        inputRef={email}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        required
+                                        fullWidth
+                                        id="phone"
+                                        label="Phone number (exclude code +380)"
+                                        name="phone"
+                                        autoComplete="Phone number"
+                                        inputRef={phone}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        required
+                                        fullWidth
                                         id="userLogin"
                                         label="Login"
                                         name="userLogin"
@@ -126,7 +155,7 @@ function Register() {
                             </Button>
                             <Grid container justifyContent="flex-end">
                                 <Grid item>
-                                    <Link href="#" variant="body2">
+                                    <Link href="/login" variant="body2">
                                         Already have an account? Sign in
                                     </Link>
                                 </Grid>

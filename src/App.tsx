@@ -22,6 +22,7 @@ import { ListingContainerHandler } from './components/ListingContainerHandler';
 import Search from './components/Search';
 import { ThemeOptions, ThemeProvider, createTheme } from '@mui/material/styles';
 import FooterComponent from './components/FooterComponent';
+import AboutPage from './components/AboutPage';
 //import CssBaseline from "@mui/material/CssBaseline";
 
 
@@ -71,6 +72,7 @@ function App() {
       <Container className="mb-4">
         <Routes>
           <Route path="/login" element={<Login />} ></Route>
+          <Route path="/about" element={<><AboutPage /> <FooterComponent/> </>} ></Route>
           <Route path="/register" element={<Register />} ></Route>
           <Route path="/" element={<><ListingContainerHandler startingPage={1} /> <FooterComponent/> </>}></Route>
           <Route path="/home/:page" element={<><ListingContainerHandler startingPage={null} /> <FooterComponent/> </>}></Route>

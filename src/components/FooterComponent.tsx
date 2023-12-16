@@ -12,6 +12,13 @@ export default function FooterComponent() {
                     <Typography variant="body2" align="center">
                         Contact: s17511@pjwstk.edu.pl
                     </Typography>
+                    <Typography variant="body2" align="center">
+                        Website create for educational purposes 
+                        in scope of PRO project
+                    </Typography>
+                    <Typography variant="body2" align="center">
+                        Author: Artem Andreoli
+                    </Typography>
                 </Grid>
             </Grid>
         </Container>

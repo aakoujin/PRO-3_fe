@@ -9,6 +9,8 @@ import axios from '../api/axios';
 import { IconButton } from '@mui/material';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 
 
 
@@ -141,7 +143,9 @@ function Search() {
                     marginBottom: 5,
                     marginTop: 2
                 }}>
-                <Typography variant="h5">Search</Typography>
+                <Typography variant="h5" sx={{
+                    marginBottom: 2 
+                }}>Search</Typography>
                 <Grid item xs={12}
 
                 >
@@ -239,7 +243,7 @@ function Search() {
                                     handleInputChange('sortOrder', newSortOrder);
                                 }}
                             >
-                                {sortOrder === 'desc' ? <ArrowDropDownIcon /> : <ArrowDropUpIcon />}
+                                {sortOrder === 'desc' ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />  }
                             </IconButton>
 
                         </Grid>

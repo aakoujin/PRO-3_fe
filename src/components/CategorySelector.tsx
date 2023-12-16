@@ -12,6 +12,7 @@ import {
   CardContent,
   List,
   ListItem,
+  Divider,
 } from '@mui/material';
 import { Category, categories } from "../extra_resources/Categories";
 import axios from '../api/axios';
@@ -68,6 +69,10 @@ export function CategorySelector({ onCategoriesSelected }: CategorySelectorProps
   };
 
   const handleSubCategoryClick = async (categoryName: string) => {
+    if(selectedCategory.length > 1){
+      setSelectedCategory((prevSelectedCategory) => prevSelectedCategory.slice(0, -1));
+    }
+    
     axios
       .get(`Tag/getSubTags/${categoryName}`)
       .then(async (response) => {
@@ -143,34 +148,45 @@ export function CategorySelector({ onCategoriesSelected }: CategorySelectorProps
             <Grid item xs={4}>
               <List>
                 {categories.map((category) => (
-
-                  <ListItem key={category.id}
-                    onClick={() => handleCategoryClick(category.name)}
-                    style={{ cursor: 'pointer' }}>
-                    {category.name}
-                  </ListItem>
+                  <div key={category.id}>
+                    <ListItem key={category.id}
+                      onClick={() => handleCategoryClick(category.name)}
+                      style={{ cursor: 'pointer' }}>
+                      {category.name}
+                    </ListItem>
+                    <Divider sx={{ color: 'white' }} />
+                  </div>
                 ))}
               </List>
             </Grid>
             <Grid item xs={4}>
               <List>
                 {Object.values(subtags).map(ti => (
-                  <ListItem key={ti.id_tag}
-                    onClick={() => handleSubCategoryClick(ti.tag_name)}
-                    style={{ cursor: 'pointer' }}>
-                    {ti.tag_name}
-                  </ListItem>))}
+                  <div key={ti.id_tag}>
+                    <ListItem key={ti.id_tag}
+                      onClick={() => handleSubCategoryClick(ti.tag_name)}
+                      style={{ cursor: 'pointer' }}>
+                      {ti.tag_name}
+
+                    </ListItem>
+                    <Divider sx={{ color: 'white' }} />
+                  </div>
+                ))}
               </List>
             </Grid>
             <Grid item xs={4}>
               <List>
                 {Object.values(finaltags).map(ti => (
-                  <ListItem
-                    onClick={() => handleLastSelect(ti.tag_name)}
-                    style={{ cursor: 'pointer' }}
-                    key={ti.id_tag}>
-                    {ti.tag_name}
-                  </ListItem>))}
+                  <div key={ti.id_tag}>
+                    <ListItem
+                      onClick={() => handleLastSelect(ti.tag_name)}
+                      style={{ cursor: 'pointer' }}
+                      key={ti.id_tag}>
+                      {ti.tag_name}
+                    </ListItem>
+                    <Divider sx={{ color: 'white' }} />
+                  </div>
+                ))}
               </List>
             </Grid>
           </Grid>

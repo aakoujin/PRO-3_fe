@@ -3,7 +3,7 @@ import ListingContainer, { ListingItem } from './ListingsContainer';
 import axios from '../api/axios';
 import Pagination from '@mui/material/Pagination';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Container } from '@mui/material';
+import { Button, Container, Stack, Typography } from '@mui/material';
 import { grey } from '@mui/material/colors';
 
 interface ListingContainerHandlerProps {
@@ -55,6 +55,28 @@ export function ListingContainerHandler({ startingPage }: ListingContainerHandle
   )
   return (
     <Container sx={{marginTop:3}}>
+      <Container maxWidth="sm" sx={{mb:5}}>
+            <Typography
+              component="h1"
+              variant="h2"
+              align="center"
+              color="text.primary"
+              gutterBottom
+            >
+              Your marketplace
+            </Typography>
+            <Typography variant="h5" align="center" color="text.secondary" paragraph>
+              Your in-company marketplace. View, create, share and manage yours and your colleages listings
+            </Typography>
+            <Stack
+              sx={{ pt: 4 }}
+              direction="row"
+              spacing={2}
+              justifyContent="center"
+            >
+              <Button variant="contained" onClick={() => {navigate("/search")}}>Explore available listings</Button>
+            </Stack>
+          </Container>
       <ListingContainer {...listings} />
       {totalPages > 1 && (
         <div style={{ display: 'flex', justifyContent: 'center', margin: '20px' }}>
