@@ -182,6 +182,7 @@ export function EditListing() {
                                         label="Title"
                                         autoFocus
                                         inputRef={titleRef}
+                                        InputLabelProps={{ shrink: true }}  
                                     />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
@@ -193,6 +194,7 @@ export function EditListing() {
                                         name="price"
                                         autoComplete="given-price"
                                         inputRef={priceRef}
+                                        InputLabelProps={{ shrink: true }}  
                                     />
                                 </Grid>
                                 <Grid item xs={12} md={24}>
@@ -206,6 +208,7 @@ export function EditListing() {
                                         minRows={5}
                                         variant="outlined"
                                         sx={{ width: '100%' }}
+                                        InputLabelProps={{ shrink: true }}  
                                     />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
@@ -217,6 +220,7 @@ export function EditListing() {
                                         id="country"
                                         label="Country"
                                         inputRef={countryRef}
+                                        InputLabelProps={{ shrink: true }}  
                                     />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
@@ -227,6 +231,7 @@ export function EditListing() {
                                         id="state"
                                         label="State"
                                         inputRef={stateRef}
+                                        InputLabelProps={{ shrink: true }}  
                                     />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
@@ -238,6 +243,7 @@ export function EditListing() {
                                         id="city"
                                         label="City"
                                         inputRef={cityRef}
+                                        InputLabelProps={{ shrink: true }}  
                                     />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
@@ -248,6 +254,7 @@ export function EditListing() {
                                         id="street"
                                         label="Street"
                                         inputRef={ctreetRef}
+                                        InputLabelProps={{ shrink: true }}  
                                     />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
@@ -258,6 +265,7 @@ export function EditListing() {
                                         id="postalCode"
                                         label="Postal Code"
                                         inputRef={postalCodeRef}
+                                        InputLabelProps={{ shrink: true }}  
                                     />
                                 </Grid>
                             </Grid>
@@ -311,6 +319,7 @@ export function EditListing() {
                                             onChange={handleChange}
                                             style={{ display: 'none' }}
                                             id="file-upload"
+                                            accept="image/*"
                                         />
                                         <label htmlFor="file-upload">
                                             <Button

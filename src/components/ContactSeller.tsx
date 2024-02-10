@@ -93,8 +93,12 @@ const ContactSeller = ({ username, listing, authorId }: ContactSellerProps) => {
 
             console.log("Registered chatRoom: " + await result.data)
 
-            const connection = new HubConnectionBuilder()
+            /*const connection = new HubConnectionBuilder()
                 .withUrl("http://localhost:42999/chat")
+                .configureLogging(LogLevel.Information)
+                .build();*/
+            const connection = new HubConnectionBuilder()
+                .withUrl("https://workshopv01-pro3.azurewebsites.net/chat")
                 .configureLogging(LogLevel.Information)
                 .build();
 

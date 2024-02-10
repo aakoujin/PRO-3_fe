@@ -99,7 +99,8 @@ const ChatContainer = () => {
         try {
 
             const connection = new HubConnectionBuilder()
-                .withUrl("http://localhost:42999/chat")
+                //.withUrl("http://localhost:42999/chat")
+                .withUrl("https://workshopv01-pro3.azurewebsites.net/chat")
                 .configureLogging(LogLevel.Information)
                 .build();
 

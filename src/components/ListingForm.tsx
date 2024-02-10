@@ -27,6 +27,8 @@ export function ListingForm() {
     const [urls, setUrls] = useState<string[]>([]);
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
+
+
     const titleRef = useRef<HTMLInputElement>(null)
     const priceRef = useRef<HTMLInputElement>(null)
     const markdownRef = useRef<HTMLTextAreaElement>(null)
@@ -132,7 +134,7 @@ export function ListingForm() {
         }
 
         const result =
-            await axios.post("http://localhost:42999/api/Listing",
+            await axios.post("/Listing",
                 JSON.stringify(newListing),
                 {
                     headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'Authorization': `Bearer ${authContext.authData?.token}` },
@@ -309,6 +311,7 @@ export function ListingForm() {
                                                 onChange={handleChange}
                                                 style={{ display: 'none' }}
                                                 id="file-upload"
+                                                accept="image/*"
                                             />
                                             <label htmlFor="file-upload">
                                                 <Button

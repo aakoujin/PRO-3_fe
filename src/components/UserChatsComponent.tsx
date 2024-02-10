@@ -110,10 +110,10 @@ const UserChatsComponent = () => {
                     )}
                   </Grid>
                   <Grid item xs={8}>
-                    <Typography variant="body1">
+                    <Typography variant="body2">
                       Resume your conversation for:
                     </Typography>
-                    <Typography sx={{ mt: 1, mb: 5 }} variant="body1">
+                    <Typography sx={{ mt: 1, mb: 5 }} variant="h5">
                       {item.name}
                     </Typography>
                   <Chip size="medium" variant="outlined" label={"Asking price: " + item.price + " $"} icon={<SellIcon />} />

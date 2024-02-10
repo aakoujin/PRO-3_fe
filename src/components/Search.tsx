@@ -72,7 +72,7 @@ function Search() {
 
     const fetchListings = async (searchQuery: String) => {
         const result =
-            await axios.get(`http://localhost:42999/api/Listing/search?${searchQuery}`,
+            await axios.get(`/Listing/search?${searchQuery}`,
                 {
                     headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
                     method: 'GET'

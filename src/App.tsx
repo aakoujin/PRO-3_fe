@@ -76,17 +76,17 @@ function App() {
           <Route path="/register" element={<Register />} ></Route>
           <Route path="/" element={<><ListingContainerHandler startingPage={1} /> <FooterComponent/> </>}></Route>
           <Route path="/home/:page" element={<><ListingContainerHandler startingPage={null} /> <FooterComponent/> </>}></Route>
-          <Route path="/new" element={<AddListing />}></Route>
-          <Route path="/mylistings" element={<PersonalListings />}></Route>
+          <Route path="/new" element={<><AddListing /> <FooterComponent/> </>}></Route>
+          <Route path="/mylistings" element={<><PersonalListings /> <FooterComponent/> </>}></Route>
           <Route path="/:id">
-            <Route path="edit" element={<EditListing />}></Route>
-            <Route index element={<FullListing />}></Route>
+            <Route path="edit" element={<><EditListing /> <FooterComponent/> </>}></Route>
+            <Route index element={<><FullListing /> <FooterComponent/> </>}></Route>
           </Route>
-          <Route path="/search" element={<Search />}></Route>
-          <Route path="/userInfo" element={<UserInfoComponent />} ></Route>
-          <Route path="/editUserInfo" element={<EditUserInfoComponent />}> </Route>
-          <Route path="/savedlistings" element={<SavedListings />}></Route>
-          <Route path="/chats" element={<UserChatsComponent />}></Route>
+          <Route path="/search" element={<> <Search /> <FooterComponent/> </>}></Route>
+          <Route path="/userInfo" element={<> <UserInfoComponent /> <FooterComponent/> </>} ></Route>
+          <Route path="/editUserInfo" element={<> <EditUserInfoComponent /> <FooterComponent/> </>}> </Route>
+          <Route path="/savedlistings" element={<><SavedListings /> <FooterComponent/> </>}></Route>
+          <Route path="/chats" element={<><UserChatsComponent /> <FooterComponent/> </>}></Route>
           <Route path="/chats/:id">
             <Route index element={<ChatContainer />}></Route>
           </Route>

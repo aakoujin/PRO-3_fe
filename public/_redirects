@@ -1,0 +1,22 @@
+# Redirects for React application on Netlify
+# Note: This assumes that your build output is in the "build" directory
+
+# Specific routes
+/login                   /index.html 200
+/about                   /index.html 200
+/register                /index.html 200
+/                       /index.html 200
+/home/*                 /index.html 200
+/new                    /index.html 200
+/mylistings             /index.html 200
+/:id/edit               /index.html 200
+/:id                    /index.html 200
+/search                 /index.html 200
+/userInfo               /index.html 200
+/editUserInfo           /index.html 200
+/savedlistings          /index.html 200
+/chats                  /index.html 200
+/chats/:id              /index.html 200
+
+# Catch-all redirect
+/*                      /index.html 200

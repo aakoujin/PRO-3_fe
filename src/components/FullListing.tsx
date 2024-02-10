@@ -51,24 +51,41 @@ export function FullListing() {
 
   const fetchListing = async () => {
 
-    const result = await fetch(
+    const result =
+      await axios.get("/Listing/" + params.id,
+        {
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          method: 'GET'
+        })
+    /*await fetch(
       "http://localhost:42999/api/Listing/" + params.id,
       {
         headers: { "Content-Type": "application/json", Accept: "application/json" },
         method: "GET"
       }
-    );
-    const returnedListing = await result.json();
+    );*/
+
+    //const returnedListing = await result.json();
+    const returnedListing = await result.data;
     setAuthorId(returnedListing.id_user);
 
-    const author = await fetch(
+    const author =
+      await axios.get("/User/postedby/" + returnedListing.id_user,
+        {
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          method: 'GET'
+        })
+
+
+    /*await fetch(
       "http://localhost:42999/api/User/postedby/" + returnedListing.id_user,
       {
         headers: { "Content-Type": "application/json", Accept: "application/json" },
         method: "GET"
       }
-    )
-    const returnedAuthor = await author.json();
+    )*/
+    //const returnedAuthor = await author.json();
+    const returnedAuthor = await author.data;
 
     const saved =
       await axios.get("/SavedListing/checkSaved/" + params.id,

@@ -36,7 +36,7 @@ export function ListingContainerHandler({ startingPage }: ListingContainerHandle
 
   const fetchListings = async (page: number) => {
     const result =
-      await axios.get("http://localhost:42999/api/Listing/withPage/" + page,
+      await axios.get("/Listing/withPage/" + page,
         {
           headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
           method: 'GET'

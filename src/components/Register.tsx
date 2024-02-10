@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect, FormEvent } from "react";
-import axios from "axios";
+import axios from "../api/axios"
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -12,6 +12,8 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from "react-router-dom";
+
+const REGISTER_URL = "/Auth/register"
 
 function Register() {
     const navigate = useNavigate();
@@ -39,17 +41,25 @@ function Register() {
             userPassword: userPassword.current!.value
         }
 
-        const result =
-            await fetch("http://localhost:42999/api/Auth/register",
-                {
-                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                    method: 'POST',
-                    body: JSON.stringify(newUser)
-                })
+        // const result =
+        //     await fetch("http://localhost:42999/api/Auth/register",
+        //         {
+        //             headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        //             method: 'POST',
+        //             body: JSON.stringify(newUser)
+        //         })
+
+        const result = await axios.post(REGISTER_URL,
+            JSON.stringify(newUser),
+            {
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                withCredentials: true
+            }
+        )
 
 
-        var createdUser = await result.json()
-        console.log(createdUser)
+        //var createdUser = await result.data;
+        //console.log(createdUser)
         navigate("/login");
 
 

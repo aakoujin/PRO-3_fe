@@ -33,7 +33,6 @@ function SavedListings() {
             setListings(listings)
             setLoading(false)
         } catch (error) {
-            console.error("Error fetching listings:", error);
             setLoading(false);
         }
     }
