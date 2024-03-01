@@ -43,7 +43,8 @@ export function FullListing() {
   const [isSaved, setIsSaved] = useState(false);
   const [tags, setTags] = useState<TagItem[] | null>(null);
   const [similar, setSimilar] = useState<ListingItem[] | null>(null);
-  const [authorId, setAuthorId] = useState();
+  const [authorId, setAuthorId] = useState<number | undefined>();
+  const [viewerId, setViewerId] = useState<number | undefined>();
 
   useEffect(() => {
     fetchListing();
@@ -76,6 +77,14 @@ export function FullListing() {
           method: 'GET'
         })
 
+    const viewer =
+      await axios.get("/User/viewer/",
+        {
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'Authorization': `Bearer ${authContext.authData?.token}` },
+          withCredentials: true
+        })
+    const tempViewer = await viewer.data;
+    setViewerId(tempViewer);
 
     /*await fetch(
       "http://localhost:42999/api/User/postedby/" + returnedListing.id_user,
@@ -295,11 +304,14 @@ export function FullListing() {
                 }}
               >
                 {authContext.authData?.token ? (
-                  <ContactSeller username={author.username} listing={listing.id_listing} authorId={authorId} />
-                ) :
-                  (
+                  viewerId === authorId ? (
                     <></>
-                  )}
+                  ) : (
+                    <ContactSeller username={author.username} listing={listing.id_listing} authorId={authorId} />
+                  )
+                ) : (
+                  <></>
+                )}
 
               </Grid>
 

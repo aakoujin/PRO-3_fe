@@ -28,7 +28,6 @@ export function ListingForm() {
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
 
-
     const titleRef = useRef<HTMLInputElement>(null)
     const priceRef = useRef<HTMLInputElement>(null)
     const markdownRef = useRef<HTMLTextAreaElement>(null)
@@ -355,6 +354,7 @@ export function ListingForm() {
                                     onClick={handleSubmit}
                                     sx={{ mt: 3, mb: 2 }}
                                     startIcon={<CheckIcon />}
+                                
                                 >
                                     Submit
                                 </Button>

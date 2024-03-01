@@ -60,7 +60,7 @@ export function EditListing() {
                     if (countryRef.current) countryRef.current.value = listingData.locations[0].country;
                     if (stateRef.current) stateRef.current.value = listingData.locations[0].state;
                     if (cityRef.current) cityRef.current.value = listingData.locations[0].city;
-                    if (ctreetRef.current) ctreetRef.current.value = listingData.locations[0].street;
+                    if (ctreetRef.current) ctreetRef.current.value = listingData.locations[0].ctreet;
                     if (postalCodeRef.current) postalCodeRef.current.value = listingData.locations[0].postalCode;
                 }
 

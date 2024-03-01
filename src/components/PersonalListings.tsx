@@ -19,6 +19,12 @@ function PersonalListings() {
     fetchListings();
   }, [])
 
+
+  const handleDeleteListing = async (id) => {
+      console.log("Deleting listing with ID:", id);
+      setListings((prevListings) => prevListings.filter((listing) => listing.id_listing !== id));
+  };
+
   var fetchedListings = Object.values(listings)
 
   const fetchListings = async () => {
@@ -52,7 +58,7 @@ function PersonalListings() {
       ) : (
         fetchedListings.map(li => (
           <Grid item key={li.id_listing} xs={12} sm={6} md={4} lg={3}>
-            <ModifiableListing {...li} />
+            <ModifiableListing {...li} onDelete={handleDeleteListing} />
           </Grid>
         ))
       )}
